@@ -32,15 +32,16 @@
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
-                  <img src="assets/images/faces/user.png" alt="image">
+                  <img src="data:${userProfile.fileType};Base64,${userProfile.fileName}" alt="image"
+                  onerror="this.onerror=null;this.src='assets/images/faces/user.png';">
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">${loginUserName}</p>
+                  <p class="mb-1 text-black">${userProflie.name}</p>
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="user-profile">
                   <i class="mdi mdi-account-circle mr-2 text-success"></i> Profile </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="logout">

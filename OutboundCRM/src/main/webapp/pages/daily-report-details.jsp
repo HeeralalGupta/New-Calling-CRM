@@ -5,24 +5,6 @@
 <html>
 <head>
 <%@ include file="common/head.jsp"%>
-<style>
-.assignedRow {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.totalAssignedTask {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: green;
-	padding: 7px;
-	border-radius: 4px;
-	width: 50px;
-	color: white;
-}
-</style>
 </head>
 <body>
 
@@ -39,8 +21,8 @@
 				<div class="page-header">
 					<h3 class="page-title">
 						<span class="page-title-icon bg-gradient-primary text-white mr-2">
-							<i class="mdi mdi-format-list-bulleted-type"></i>
-						</span> Assigned Task
+							<i class="mdi mdi-account-multiple-plus"></i>
+						</span> View Daily Report
 					</h3>
 					<nav aria-label="breadcrumb">
 						<ul class="breadcrumb">
@@ -57,41 +39,24 @@
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
-								<h4 class="card-description text-info text-bold">Assigned
-									Task</h4>
+								<h4 class="card-description text-info text-bold">Calling Detials</h4>
 								<div class="table-responsive">
 									<table class="table">
 										<thead>
-											<tr class="text-center">
-												<th>S.No.</th>
-												<th>Assigned Id</th>
+											<tr>
 												<th>Name</th>
-												<th>Data Category</th>
-												<th>Serial No.</th>
-												<th>Total Data Assigned</th>
-												<th>Time</th>
-												<th>Action</th>
+												<th>Email</th>
+												<th>Today's Calls</th>
+												<th>Total Calls</th>
 											</tr>
 										</thead>
 										<tbody>
-											<c:forEach var="task" items="${tasks}" varStatus="sno">
-												<tr class="text-center">
-													<td>${sno.count}</td>
-													<td>${task.assignId}</td>
-													<td>${userIdToUserName[task.userId]}</td>
-													<td>${task.dataCategory}</td>
-													<td>${task.minSerialNumber}- ${task.maxSerialNumber}</td>
-													<td class="assignedRow">
-										                <c:set var="difference" value="${task.maxSerialNumber - task.minSerialNumber}" />
-										                <div class="totalAssignedTask">${difference}</div>
-										            
-										            </td>
-													<td>${task.time}</td>
-													<td><a href="javascript:void(0);"
-														onclick="deleteTask('${task.id}')"><img
-															src="assets/images/delete-icon.png"></a></td>
-												</tr>
-											</c:forEach>
+											<tr>
+												<td>${userName}</td>
+												<td>${userEmail}</td>
+												<td>${countReportByDate}</td>
+												<td>${countTotalReport}</td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
@@ -99,7 +64,6 @@
 						</div>
 					</div>
 				</div>
-
 				<!-- ===================== Page body ends ============================================== -->
 
 			</div>
@@ -114,8 +78,9 @@
 	<!-- container-scroller -->
 	<!-- plugins:js -->
 	<%@ include file="common/scripts.jsp"%>
+	<!-- End custom js for this page -->
 	<script>
-		function deleteTask(taskId){
+		function deleteUser(userId){
 			Swal.fire({
 				  title: 'Are you sure?',
 				  text: "You won't be able to revert this!",
@@ -126,7 +91,7 @@
 				  confirmButtonText: 'Delete'
 				}).then((result) => {
 				  if (result.isConfirmed) {
-				   window.location="/deleteTask/"+taskId;
+				   window.location="/deleteUser/"+userId;
 				  }
 				  else{
 					  swal("Your job is safe !!!")
@@ -134,6 +99,7 @@
 				})
 		}
 		</script>
-	<!-- End custom js for this page -->
 </body>
 </html>
+
+

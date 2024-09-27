@@ -6,57 +6,111 @@
 <head>
 <%@ include file="common/head.jsp"%>
 <style type="text/css">
-	.connected{
-		background-color: lightgreen;
-		width: auto;
-		padding: 5px;
-		color: darkgreen;
-		border-radius: 5px;
-		text-align: center;
-	}
-	.not-connected{
-		background-color: #FF7F7F;
-		width: auto;
-		padding: 5px;
-		color: #8B0000;
-		border-radius: 5px;
-		text-align: center;
-	}
-	/* Pagination */
-	div.pager {
-    text-align: right;
-    width: 40em;
-    margin: 1em auto;
-	}
-	
-	div.pg-goto {
-	color: #000000;
-	font-size: 15px;
-	cursor: pointer;
-	background: #D0B389;
-	padding: 2px 4px 2px 4px;
-	}
-	
-	div.pg-selected {
-	color: #fff;
-	font-size: 15px;
-	background: #000000;
-	padding: 2px 4px 2px 4px;
-	}
-	
-	div.pg-normal {
-	color: #000000;
-	font-size: 15px;
-	cursor: pointer;
-	background: #D0B389;
-	padding: 4px 6px 4px 6px;
-	margin: 5px;
-	}
+.connected {
+	background-color: lightgreen;
+	width: auto;
+	padding: 5px;
+	color: darkgreen;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.not-connected {
+	background-color: #FF7F7F;
+	width: auto;
+	padding: 5px;
+	color: #8B0000;
+	border-radius: 5px;
+	text-align: center;
+}
+/* Pagination */
+
+/* Basic Pagination Styling */
+.pagination {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Styling for each pagination item */
+.pagination li {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Disabled state for the "Previous" button */
+.pagination li.disabled {
+    color: #ccc;
+    border-color: #eee;
+    cursor: not-allowed;
+}
+
+/* Active next button with (current) state */
+.pagination li#next {
+    background-color: #f9f9f9;
+    border-color: #007bff;
+}
+
+/* Styling the (current) text */
+.pagination li#next .sr-only {
+    font-size: 12px;
+    color: gray;
+    margin-left: 5px;
+    font-style: italic;
+}
+
+/* Hover effect for enabled pagination items */
+.pagination li:hover:not(.disabled) {
+    background-color: #f1f1f1;
+    border-color: #ccc;
+}
+
+/* Next button specific hover */
+.pagination li#next:hover {
+    background-color: #e0eaff;
+    border-color: #0056b3;
+}
+
+/* Text styling for the Next button */
+.pagination li#next .next {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Active state styling */
+.pagination li:active {
+    background-color: #cce5ff; /* Active state background */
+    border-color: #004085; /* Active state border */
+    color: #004085; /* Active state text color */
+}
+
+/* Focus state styling */
+.pagination li:focus {
+    outline: none;
+    background-color: #d4edda; /* Focus state background */
+    border-color: #28a745; /* Focus state border */
+}
+
+/* Adding active and focus states to the next button */
+.pagination li#next:active {
+    background-color: #b3d7ff;
+    border-color: #0056b3;
+    color: #00376b;
+}
+
+
 </style>
+
 </head>
 <body>
 
 	<%@ include file="common/header.jsp"%>
+
 
 	<!-- partial -->
 	<div class="container-fluid page-body-wrapper">
@@ -83,32 +137,48 @@
 				</div>
 				<!-- ===================== Page body starts ============================================ -->
 				<!-- Urban Table -->
-           		<div class="row">
-	              <div class="col-12 grid-margin">
-	                <div class="card">
+				<div class="row">
+					<div class="col-12 grid-margin">
+						<div class="card">
 							<div class="card-body">
 								<!-- Search input -->
-								<div class="row">
-									<div class="col-md-9">
+								<div class="row align-items-center">
+									<div class="col-md-4">
 										<h4 class="card-title">Called Number</h4>
 									</div>
-									<div class="col-md-3 mb-3">
+									<div class="col-md-4 d-flex align-items-center">
+										<div class="number-of-rows mr-2">
+											<p>Select No. of Rows:</p>
+										</div>
+										<div class="form-group">
+											<!-- Show Numbers Of Rows -->
+											<select class="form-control" name="state" id="maxRows">
+												<option value="5000">Show ALL Rows</option>
+												<option value="5">5</option>
+												<option value="10">10</option>
+												<option value="15">15</option>
+												<option value="20">20</option>
+												<option value="50">50</option>
+												<option value="70">70</option>
+												<option value="100">100</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-4 mb-3">
 										<div class="input-group">
-											<input type="text" 
-												class="form-control"
-												placeholder="Type to search"
-												id="u-search"
-												onkeyup="myFunction()"
-												aria-describedby="basic-addon2">
+											<input type="text" class="form-control"
+												placeholder="Type to search" id="u-search"
+												onkeyup="myFunction()" aria-describedby="basic-addon2">
 											<div class="input-group-append">
-												<button class="btn btn-sm btn-gradient-primary" type="button"
-													cursorshover="true">Search</button>
+												<button class="btn btn-sm btn-gradient-primary"
+													type="button" cursorshover="true">Search</button>
 											</div>
 										</div>
 									</div>
 								</div>
+
 								<div class="table-responsive">
-									<table class="table paginated" >
+									<table class="table table-striped table-class" id="table-id">
 										<thead>
 											<tr class="text-info">
 												<th>S.No.</th>
@@ -122,12 +192,11 @@
 												<th>Gender</th>
 												<th>Age</th>
 												<th>District</th>
-												<th>Police Station</th>
-												<th>Municipality</th>
 												<th>Lok Sabha</th>
 												<th>Vidhan Sabha</th>
 												<th>Sub Divisional</th>
 												<th>Calling For</th>
+												<th>Date</th>
 												<th>Note</th>
 												<!-- <th colspan="2" class="text-center">Action</th> -->
 											</tr>
@@ -147,12 +216,11 @@
 													<td>${callerReport.gender}</td>
 													<td>${callerReport.age}</td>
 													<td>${callerReport.urbanDistrict}</td>
-													<td>${callerReport.urbanPoliceStation}</td>
-													<td>${callerReport.urbanMunicipality}</td>
 													<td>${callerReport.lokSabha}</td>
 													<td>${callerReport.vidhanSabha}</td>
 													<td>${callerReport.subDivision}</td>
 													<td>${callerReport.callingFor}</td>
+													<td>${callerReport.date}</td>
 													<td>${callerReport.note}</td>
 
 													<%-- <td class="text-right"><a href="javascript:void(0);"
@@ -169,12 +237,26 @@
 											</c:forEach>
 										</tbody>
 									</table>
+									<!--Start Pagination -->
+									<div class='pagination-container my-3'>
+										<nav>
+											<ul class="pagination">
+
+												<li data-page="prev"><span class="prev"> Prev <span
+														class="sr-only current">(current)</span></span></li>
+												<!--	Here the JS Function Will Add the Rows -->
+												<li data-page="next" id="prev"><span class="next"> Next <span
+														class="sr-only current">(current)</span></span></li>
+											</ul>
+										</nav>
+									</div>
+									<!--End Pagination -->
 								</div>
-								
+
 							</div>
 						</div>
-	              </div>
-	            </div>
+					</div>
+				</div>
 				<!-- ===================== Page body ends ============================================== -->
 
 			</div>

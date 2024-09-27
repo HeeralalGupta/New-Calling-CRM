@@ -1,5 +1,6 @@
 package com.crm.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class InboundAddReportService {
 	
 	// Saving Inbound report data
 	public InboundReport saveInboundReport(InboundReport report) {
+		report.setDate(LocalDate.now());
 		return inboundRepo.save(report);
 	}
 	
@@ -26,6 +28,16 @@ public class InboundAddReportService {
 	
 	// finding caller details by caller id 
 	public List<InboundReport> findCalledData(long id) {
-		return inboundRepo.findByUserId(id);
+		return inboundRepo.findByUserIdAndDate(id, LocalDate.now());
+	}
+	
+	// count total report by id and current date
+	public Long countReportByIdAndDate(Long id) {
+		return inboundRepo.countByIdAndDate(id, LocalDate.now());
+	}
+	
+	// count total report by id 
+	public Long countReportById(Long id) {
+		return inboundRepo.countById(id);
 	}
 }

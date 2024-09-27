@@ -1,5 +1,7 @@
 package com.crm.controller;
 
+import java.util.Base64;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +21,7 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 
-	// Admin Login
+	// Admin and User Login
 	@PostMapping("/login")
 	public String login(@ModelAttribute User user, Model model, HttpSession session) {
 
@@ -28,36 +30,44 @@ public class LoginController {
 
 		if (admin != null && user.getPassword().equals(admin.getPassword())) {
 			try {
-				session.setAttribute("userSession", admin.getEmail());
+				session.setAttribute("userSession", admin.getId());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			User userDB = loginService.adminLogin(true, user.getEmail());
 
-			String[] split = admin.getName().split(" ");
-			String adminName = null;
-			for (int i = 0; i <= split.length;) {
-				adminName = split[i];
-				break;
+			try {
+				byte[] data = admin.getData();
+				String image = Base64.getEncoder().encodeToString(data);
+				admin.setFileName(image);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			session.setAttribute("loginUserName", adminName);
+			
+			session.setAttribute("loginUserId", userDB.getId());
+			session.setAttribute("userProflie", admin);
 			model.addAttribute("title", "Dashboard");
 			return "admin-dashboard";
+			
 		} else if (users != null && user.getPassword().equals(users.getPassword())) {
 
 			try {
-				session.setAttribute("userSession", users.getEmail());
+				session.setAttribute("userSession", users.getId());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			User userDB = loginService.adminLogin(false, user.getEmail());
-			String[] split = userDB.getName().split(" ");
-			String userName = null;
-			for (int i = 0; i <= split.length;) {
-				userName = split[i];
-				break;
+
+			try {
+				byte[] data = users.getData();
+				String image = Base64.getEncoder().encodeToString(data);
+				users.setFileName(image);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+
 			session.setAttribute("loginUserId", userDB.getId());
-			session.setAttribute("loginUserName", userName);
+			session.setAttribute("userProfile", users);
 			model.addAttribute("title", "Dashboard");
 			return "user-dashboard";
 		} else {
@@ -65,6 +75,7 @@ public class LoginController {
 			System.out.println("Failed");
 			return "login";
 		}
+
 
 	}
 

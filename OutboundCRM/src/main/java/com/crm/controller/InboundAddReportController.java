@@ -1,6 +1,7 @@
 package com.crm.controller;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.crm.model.AssignTask;
 import com.crm.model.InboundReport;
+import com.crm.model.User;
 import com.crm.service.AssignTaskService;
 import com.crm.service.CsvFileService;
 import com.crm.service.InboundAddReportService;
+import com.crm.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,22 +30,41 @@ public class InboundAddReportController {
 
 	@Autowired
 	private CsvFileService csvFileService;
-
+	
+	@Autowired
+	private UserService userService;
+	
 	@Autowired
 	private AssignTaskService taskAssignService;
 
 	// Fetching csv data and setting to input box for first time
 	@GetMapping("/add-inbound")
 	public String getCSVFileData(HttpSession session, Model model) throws NullPointerException {
-
+		
+		if (session == null || session.getAttribute("userSession") == null) {
+			return "redirect:/error-page";
+		}
+		
 		try {
 			// Fetching min and max csv serial number
-			String uid = session.getAttribute("loginUserId").toString();
+			String uid = session.getAttribute("loginUserId").toString();		
+			Long loggedInUserId = Long.parseLong(uid);
+			
+			//======================== for profile image ==================
+			// getting user details from the database  
+		    User userdb = userService.getUserById(loggedInUserId);
 
-			if (uid == null) {
-				return "login";
-			}
-			long loggedInUserId = Long.parseLong(uid);
+		    // If user data is present, encode the profile image to base64
+		    if (userdb != null && userdb.getData() != null) {
+		        byte[] content = userdb.getData(); 
+		        String base64Image = Base64.getEncoder().encodeToString(content);
+		        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
+		    }
+
+		    // Add user details and title to the model
+		    model.addAttribute("userProfile", userdb);
+		    //======================= profile image end ======================
+		    
 			model.addAttribute("userId", loggedInUserId);
 			AssignTask task = taskAssignService.getAssignedTask(loggedInUserId);
 
@@ -57,18 +79,22 @@ public class InboundAddReportController {
 				List<String[]> csvRows = getCsvRowsBySerialNumberRange(csvData, min, max);
 
 				if ((currentSerialNumber <= max && currentSerialNumber <= csvRows.size())) {
-					String[] csvRow = csvRows.get((int) (currentSerialNumber - 1)); // Fetch the current row
 					// Note: Iterate this string and set one row to one model
+					String[] csvRow = csvRows.get((int) (currentSerialNumber - 1)); // Fetch the current row				
 					// Checking mobile number, called or not
-					String checkCalledNumber = csvRow[3];
-					System.out.println(checkCalledNumber);
-					InboundReport savedMobileNumber = inboundAddReportService.findReportByMobile(checkCalledNumber);
-					if (savedMobileNumber != null && savedMobileNumber.getMobile().equals(checkCalledNumber)) {
-						model.addAttribute("assignedData",
-								"The given below mobile number is already called. Thank You!");
-						model.addAttribute("csvRow", csvRow); // Add the current row to the model
+					if (csvRow.length > 3) {
+					    String checkCalledNumber = csvRow[3];
+					    // Proceed with your logic
+					    InboundReport savedMobileNumber = inboundAddReportService.findReportByMobile(checkCalledNumber);
+					    if (savedMobileNumber != null && savedMobileNumber.getMobile().equals(checkCalledNumber)) {
+					        model.addAttribute("assignedData", "The given below mobile number is already called. Thank You!");
+					        model.addAttribute("csvRow", csvRow); // Add the current row to the model
+					    } else {
+					        model.addAttribute("csvRow", csvRow); // Add the current row to the model
+					    }
 					} else {
-						model.addAttribute("csvRow", csvRow); // Add the current row to the model
+					    // Handle the case where the CSV row has fewer elements
+					    model.addAttribute("assignedData", "Thank You! You have done your job!");
 					}
 
 					currentSerialNumber++;
@@ -89,19 +115,33 @@ public class InboundAddReportController {
 		return "add-inbound-report";
 	}
 
-	// Interate & fetch data and submit for 2nd time and rest all the time
+	// Iterate & fetch data and submit for 2nd time and rest all the time
 	@PostMapping("/add-inbound")
 	public String iterateAndSubmit(@ModelAttribute InboundReport report,
 			@RequestParam("currentSerialNumber") long currentSNo, HttpSession session, Model model)
-			throws NullPointerException, ArrayIndexOutOfBoundsException {
+			throws NullPointerException, ArrayIndexOutOfBoundsException, NumberFormatException {
 
 		try {
 			// Fetching min and max csv serial number
-			String uid = session.getAttribute("loginUserId").toString();
+			String uid = session.getAttribute("userSession").toString();
 			if (uid == null) {
 				return "login";
 			}
-			long loggedInUserId = Long.parseLong(uid);
+			Long loggedInUserId = Long.parseLong(uid);
+			
+			// getting user details from the database  
+		    User userdb = userService.getUserById(loggedInUserId);
+
+		    // If user data is present, encode the profile image to base64
+		    if (userdb != null && userdb.getData() != null) {
+		        byte[] content = userdb.getData(); 
+		        String base64Image = Base64.getEncoder().encodeToString(content);
+		        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
+		    }
+
+		    // Add user details and title to the model
+		    model.addAttribute("userProfile", userdb);
+			
 			model.addAttribute("userId", loggedInUserId);
 			AssignTask task = taskAssignService.getAssignedTask(loggedInUserId);
 

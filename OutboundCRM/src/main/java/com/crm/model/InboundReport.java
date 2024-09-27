@@ -1,5 +1,7 @@
 package com.crm.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,7 +41,15 @@ public class InboundReport {
 	private String subDivision;
 	private String callingFor;
 	private String note;
+	private LocalDate date;
 	
+	
+	public LocalDate getDate() {
+		return date;
+	}
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
 	public Long getId() {
 		return Id;
 	}
@@ -205,7 +215,7 @@ public class InboundReport {
 			String name, String mobile, String alternateMobile, String email, String profession, String gender, int age,
 			String residentialType, String ruralDistrict, String ruralBlock, String ruralPanchayat, String ruralVillage,
 			int ruralWardNumber, String urbanDistrict, String urbanPoliceStation, String urbanMunicipality,
-			String lokSabha, String vidhanSabha, String subDivision, String callingFor, String note) {
+			String lokSabha, String vidhanSabha, String subDivision, String callingFor, String note, LocalDate date) {
 		super();
 		Id = id;
 		this.userId = userId;
@@ -233,6 +243,7 @@ public class InboundReport {
 		this.subDivision = subDivision;
 		this.callingFor = callingFor;
 		this.note = note;
+		this.date = date;
 	}
 	@Override
 	public String toString() {
@@ -244,8 +255,10 @@ public class InboundReport {
 				+ ruralPanchayat + ", ruralVillage=" + ruralVillage + ", ruralWardNumber=" + ruralWardNumber
 				+ ", urbanDistrict=" + urbanDistrict + ", urbanPoliceStation=" + urbanPoliceStation
 				+ ", urbanMunicipality=" + urbanMunicipality + ", lokSabha=" + lokSabha + ", vidhanSabha=" + vidhanSabha
-				+ ", subDivision=" + subDivision + ", callingFor=" + callingFor + ", note=" + note + "]";
+				+ ", subDivision=" + subDivision + ", callingFor=" + callingFor + ", note=" + note + ", date=" + date
+				+ "]";
 	}
+	
 	
 	
 	

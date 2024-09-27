@@ -6,14 +6,14 @@
 <%@ include file="common/head.jsp" %>
 </head>
 <body>
-	
+	<%-- 
 	<%
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // Preventing from back after logout.
 		if(session.getAttribute("userSession") == null){
 			response.sendRedirect("pages/login.jsp");
 		}
 	
-	%>
+	%> --%>
 	
    
       <%@ include file = "common/admin-header.jsp" %>

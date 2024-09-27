@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.crm.model.Response;
 import com.crm.model.User;
@@ -60,6 +61,22 @@ public class UserController {
 		} else {
 			return new Response(false, "Invalid OTP");
 		}
+	}
+	
+	@PostMapping("/updateProfile/{id}")
+	public String updateUserProfile(@RequestParam("image") MultipartFile file, @PathVariable("id") Long id, User user, Model model, HttpSession session) {
+		try {
+			System.out.println(id);
+			User updateProfile = userService.updateProfile(file, user, id);
+			if(updateProfile!=null) {
+				session.setAttribute("success", updateProfile);
+				System.out.println("Updated");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.getMessage();
+		}
+		return "redirect:/user-profile";
 	}
 
 }
