@@ -35,19 +35,11 @@ public class LoginController {
 				e.printStackTrace();
 			}
 			User userDB = loginService.adminLogin(true, user.getEmail());
-
-			try {
-				byte[] data = admin.getData();
-				String image = Base64.getEncoder().encodeToString(data);
-				admin.setFileName(image);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			
 			session.setAttribute("loginUserId", userDB.getId());
 			session.setAttribute("userProflie", admin);
 			model.addAttribute("title", "Dashboard");
-			return "admin-dashboard";
+			return "redirect:/admin-dashboard";
 			
 		} else if (users != null && user.getPassword().equals(users.getPassword())) {
 
@@ -58,24 +50,15 @@ public class LoginController {
 			}
 			User userDB = loginService.adminLogin(false, user.getEmail());
 
-			try {
-				byte[] data = users.getData();
-				String image = Base64.getEncoder().encodeToString(data);
-				users.setFileName(image);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
 			session.setAttribute("loginUserId", userDB.getId());
 			session.setAttribute("userProfile", users);
 			model.addAttribute("title", "Dashboard");
-			return "user-dashboard";
+			return "redirect:/user-dashboard";
 		} else {
 			model.addAttribute("errorMsg", "Username or password is incorrect!");
 			System.out.println("Failed");
 			return "login";
 		}
-
 
 	}
 
@@ -88,7 +71,7 @@ public class LoginController {
 		}
 		session.invalidate(); // Invalidate the session to log out the user
 
-		return "redirect:/login-page"; // Use redirect to prevent caching issues
+		return "redirect:/login"; // Use redirect to prevent caching issues
 	}
 
 }

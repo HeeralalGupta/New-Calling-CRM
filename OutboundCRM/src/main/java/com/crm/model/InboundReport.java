@@ -1,6 +1,7 @@
 package com.crm.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +43,7 @@ public class InboundReport {
 	private String callingFor;
 	private String note;
 	private LocalDate date;
+	private LocalTime assignTime;
 	
 	
 	public LocalDate getDate() {
@@ -207,6 +209,12 @@ public class InboundReport {
 	public void setNote(String note) {
 		this.note = note;
 	}
+	public LocalTime getAssignTime() {
+		return assignTime;
+	}
+	public void setAssignTime(LocalTime assignTime) {
+		this.assignTime = assignTime;
+	}
 	public InboundReport() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -215,7 +223,8 @@ public class InboundReport {
 			String name, String mobile, String alternateMobile, String email, String profession, String gender, int age,
 			String residentialType, String ruralDistrict, String ruralBlock, String ruralPanchayat, String ruralVillage,
 			int ruralWardNumber, String urbanDistrict, String urbanPoliceStation, String urbanMunicipality,
-			String lokSabha, String vidhanSabha, String subDivision, String callingFor, String note, LocalDate date) {
+			String lokSabha, String vidhanSabha, String subDivision, String callingFor, String note, LocalDate date,
+			LocalTime assignTime) {
 		super();
 		Id = id;
 		this.userId = userId;
@@ -244,6 +253,7 @@ public class InboundReport {
 		this.callingFor = callingFor;
 		this.note = note;
 		this.date = date;
+		this.assignTime = assignTime;
 	}
 	@Override
 	public String toString() {
@@ -256,10 +266,9 @@ public class InboundReport {
 				+ ", urbanDistrict=" + urbanDistrict + ", urbanPoliceStation=" + urbanPoliceStation
 				+ ", urbanMunicipality=" + urbanMunicipality + ", lokSabha=" + lokSabha + ", vidhanSabha=" + vidhanSabha
 				+ ", subDivision=" + subDivision + ", callingFor=" + callingFor + ", note=" + note + ", date=" + date
-				+ "]";
+				+ ", assignTime=" + assignTime + "]";
 	}
 	
-	
-	
+
 	
 }

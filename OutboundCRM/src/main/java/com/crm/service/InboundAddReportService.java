@@ -1,6 +1,7 @@
 package com.crm.service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,22 @@ public class InboundAddReportService {
 	
 	// count total report by id 
 	public Long countReportById(Long id) {
-		return inboundRepo.countById(id);
+		return inboundRepo.countByUserId(id);
+	}
+	
+	public Long countCallConnected(Long id, String connectionType) {
+		return inboundRepo.countByUserIdAndConnectionType(id, connectionType);
+	}
+	
+	public List<InboundReport> findReportByUserIdAndDateBetween(Long id, LocalDate fromDate, LocalDate toDate){
+		return inboundRepo.findByUserIdAndDateBetween(id, fromDate, toDate);
+	}
+	
+	public int connectedCalls(Long userId, String connected, LocalTime time) {
+		return inboundRepo.countByUserIdAndConnectionTypeAndAssignTime(userId, connected, time);
+	}
+	
+	public int totalCalls(Long userId, LocalTime time) {
+		return inboundRepo.countByUserIdAndAssignTime(userId, time);
 	}
 }

@@ -36,13 +36,13 @@
             
              <li class="nav-item">
               <a class="nav-link" href="add-user">
-                <span class="menu-title">Add User</span>
+                <span class="menu-title">Add Telecaller</span>
                 <i class="mdi mdi-account-multiple-plus menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="add-csv">
-                <span class="menu-title">Upload CSV File</span>
+                <span class="menu-title">Assign Task</span>
                 <i class="mdi mdi-file menu-icon"></i>
               </a>
             </li>
@@ -54,8 +54,20 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="daily-report">
-                <span class="menu-title">View Daily Report</span>
+                <span class="menu-title">Generate Report</span>
                 <i class="mdi mdi-eye menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span class="menu-title">Data Bank</span>
+                <i class="mdi mdi-database-plus menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="check-feedback">
+                <span class="menu-title">Check Feedback</span>
+                <i class="mdi mdi-message-text-outline menu-icon"></i>
               </a>
             </li>
           </ul>

@@ -22,7 +22,7 @@
 					<h3 class="page-title">
 						<span class="page-title-icon bg-gradient-primary text-white mr-2">
 							<i class="mdi mdi-account-multiple-plus"></i>
-						</span> View Daily Report
+						</span> View Report
 					</h3>
 					<nav aria-label="breadcrumb">
 						<ul class="breadcrumb">
@@ -34,8 +34,143 @@
 					</nav>
 				</div>
 				<!-- ===================== Page body starts ============================================ -->
-	
 				<div class="row mt-4">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-body">
+								<h4 class="card-description text-info text-bold">Generate Report</h4>
+								<form id="reportForm">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group row">
+												<label class="col-sm-3 col-form-label">Telecaller<span
+													style="color: red;">*</span></label>
+												<div class="col-sm-9">
+													<select class="form-control" name="userId">
+														<option selected>Select Option</option>
+														<c:forEach var="userName" items="${users}">
+															<option value="${userName.id}">${userName.name}</option>
+														</c:forEach>
+													</select>
+												</div>
+											</div>
+										</div>
+										
+										<div class="col-md-4">
+											<div class="form-group row">
+												<label class="col-sm-3 col-form-label">From</label>
+												<div class="col-sm-9">
+													<input type="date" id="fromDate" name="fromDate"
+														class="form-control" required />
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-4">
+											<div class="form-group row">
+												<label class="col-sm-3 col-form-label">To</label>
+												<div class="col-sm-9">
+													<input type="date" id="date"
+														name="toDate" class="form-control" required />
+												</div>
+											</div>
+										</div>								
+									</div>
+									
+									<div class="row mb-4">
+										<div class="col-md-12">
+											<button type="submit" class="btn btn-gradient-primary btn-fw"
+												cursorshover="true">Generate</button>
+										</div>
+									</div>
+								</form>
+								<!-- ================= Report Generated ==================== -->
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-4">
+					<div class="col-12">
+						<div class="card" id="reportData" style="display: none;">
+							<div class="card-body">
+								<div class="report" >
+									<!-- Search input -->
+									<div class="row align-items-center">
+										<div class="col-md-4">
+											<h4 class="card-title">Generated Report</h4>
+										</div>
+										<div class="col-md-4 d-flex align-items-center">
+											<div class="number-of-rows mr-2">
+												<p>Select No. of Rows:</p>
+											</div>
+											<div class="form-group">
+												<!-- Show Numbers Of Rows -->
+												<select class="form-control" name="state" id="maxRows">
+													<option value="5000">Show ALL Rows</option>
+													<option value="5">5</option>
+													<option value="10">10</option>
+													<option value="15">15</option>
+													<option value="20">20</option>
+													<option value="50">50</option>
+													<option value="70">70</option>
+													<option value="100">100</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-4 mb-3 float-right">
+											<div class="input-group">
+												<input type="text" class="form-control"
+													placeholder="Type to search" id="search"
+													onkeyup="myFunction()" aria-describedby="basic-addon2">
+												<div class="input-group-append">
+													<button class="btn btn-sm btn-gradient-primary"
+														type="button" cursorshover="true">Search</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="table-responsive">
+										<table class="table table-class mt-4" id="reportTable">
+											<thead>
+												<tr>
+													<th>S.No.</th>
+													<th>Assign Date</th>
+													<th>Assign Time</th>
+													<th>Total Data Assigned</th>
+													<th>Data Type</th>
+													<th>Calling Area</th>
+													<th>Total Call</th>
+													<th>Call Connected</th>
+													
+												</tr>
+											</thead>
+											<tbody>
+												<!-- Dynamic data will populate -->
+											</tbody>
+										</table>
+										<!--Start Pagination -->
+										<div class='pagination-container my-3'>
+											<nav>
+												<ul class="pagination">
+	
+													<li data-page="prev"><span class="prev"> Prev <span
+															class="sr-only current">(current)</span></span></li>
+													<!--	Here the JS Function Will Add the Rows -->
+													<li data-page="next" id="prev"><span class="next"> Next <span
+															class="sr-only current">(current)</span></span></li>
+												</ul>
+											</nav>
+										</div>
+										<!--End Pagination -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<%-- <div class="row mt-4">
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
@@ -56,7 +191,7 @@
 													<td>${sno.count}</td>
 													<td>${user.name}</td>
 													<td>${user.email}</td>
-													<td><a href="countByDate?id=${user.id}" <%-- onclick="openOtpDialog('${user.id}', '${user.email}')" --%>><button class="btn btn-success">View Daily Report</button></a></td>
+													<td><a href="report-details?id=${user.id}" ><button class="btn btn-success">View Daily Report</button></a></td>
 												</tr>
 											</c:forEach>
 										</tbody>
@@ -66,6 +201,7 @@
 						</div>
 					</div>
 				</div>					
+				 --%>
 				<!-- ===================== Page body ends ============================================== -->
 
 			</div>
@@ -100,7 +236,75 @@
 				  }
 				})
 		}
+		/* Searching */
+		$(document).ready(function(){
+		  $("#search").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#reportTable tr").filter(function() {
+		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});
 		</script>
+		
+		<!-- Generating Report Dynamically  -->	
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+		 <script>
+		 $(document).ready(function() {
+			    // Hide the reportData div when the Telecaller dropdown value changes
+			    $("select[name='userId']").change(function() {
+			        $("#reportData").hide();
+			    });
+
+			    // Submit form and show the report data
+			    $("#reportForm").submit(function(event) {
+			        event.preventDefault(); // Prevent default form submission
+			        
+			        $.ajax({
+			            url: "/generateReport", // The URL to the controller method
+			            type: "POST",
+			            data: $(this).serialize(), // Send form data
+			            success: function(data) {
+			                // Clear existing table rows
+			                $("#reportTable tbody").empty();
+			                
+			                // Check if data is returned
+			                if (data.length > 0) {
+			                    $.each(data, function(index, report) {
+			                    	// Ensure report values exist and provide a fallback if necessary
+			                        var minSerialNumber = report.minSerialNumber || 0;
+			                        var maxSerialNumber = report.maxSerialNumber || 0;
+			                        
+			                        var row = "<tr>" +
+			                                  "<td>" + (index + 1) + "</td>" +
+			                                  "<td>" + report.date + "</td>" +
+			                                  "<td>" + report.time + "</td>" +
+			                                  "<td>" + (maxSerialNumber-minSerialNumber) + "</td>" +	
+			                                  "<td>" + report.dataCategory + "</td>" +
+			                                  "<td>" + report.callingAreaName + "</td>" +
+			                                  "<td>" + report.totalCalls + "</td>" +
+			                                  "<td>" + report.connectedCalls + "</td>" +
+
+			                                  "</tr>";
+			                        $("#reportTable tbody").append(row);
+			                    });
+
+			                    // Show the report data div
+			                    $("#reportData").show();
+			                } else {
+			                    alert("No data found for the selected criteria.");
+			                }
+			            },
+			            error: function(error) {
+			                console.log("Error:", error);
+			            }
+			        });
+			    });
+			});
+
+	    </script>
+		
 </body>
 </html>
 												

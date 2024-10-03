@@ -1,22 +1,24 @@
 package com.crm.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.crm.model.AssignTask;
 import com.crm.model.InboundReport;
 import com.crm.model.User;
 import com.crm.service.AssignTaskService;
-import com.crm.service.CsvFileService;
 import com.crm.service.InboundAddReportService;
 import com.crm.service.UserService;
 
@@ -28,8 +30,8 @@ public class InboundAddReportController {
 	@Autowired
 	private InboundAddReportService inboundAddReportService;
 
-	@Autowired
-	private CsvFileService csvFileService;
+//	@Autowired
+//	private CsvFileService csvFileService;
 	
 	@Autowired
 	private UserService userService;
@@ -51,18 +53,7 @@ public class InboundAddReportController {
 			Long loggedInUserId = Long.parseLong(uid);
 			
 			//======================== for profile image ==================
-			// getting user details from the database  
-		    User userdb = userService.getUserById(loggedInUserId);
-
-		    // If user data is present, encode the profile image to base64
-		    if (userdb != null && userdb.getData() != null) {
-		        byte[] content = userdb.getData(); 
-		        String base64Image = Base64.getEncoder().encodeToString(content);
-		        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-		    }
-
-		    // Add user details and title to the model
-		    model.addAttribute("userProfile", userdb);
+//		    userProfile(session, model);
 		    //======================= profile image end ======================
 		    
 			model.addAttribute("userId", loggedInUserId);
@@ -72,31 +63,33 @@ public class InboundAddReportController {
 
 				long min = task.getMinSerialNumber();
 				long max = task.getMaxSerialNumber();
-				System.out.println("Min = "+min+" "+"Max = "+max);
+				System.out.println("Min = "+min+""+"Max = "+max);
+				
 				long currentSerialNumber = min; // Start from minSerialNumber
 				// Fetching csv file data
-				List<String[]> csvData = csvFileService.getCsvData();
+				List<String[]> csvData = taskAssignService.getCSVData(loggedInUserId);	
 				List<String[]> csvRows = getCsvRowsBySerialNumberRange(csvData, min, max);
 
 				if ((currentSerialNumber <= max && currentSerialNumber <= csvRows.size())) {
 					// Note: Iterate this string and set one row to one model
-					String[] csvRow = csvRows.get((int) (currentSerialNumber - 1)); // Fetch the current row				
+					String[] csvRow = csvRows.get((int) (currentSerialNumber-1)); // Fetch the current row				
 					// Checking mobile number, called or not
-					if (csvRow.length > 3) {
-					    String checkCalledNumber = csvRow[3];
-					    // Proceed with your logic
-					    InboundReport savedMobileNumber = inboundAddReportService.findReportByMobile(checkCalledNumber);
-					    if (savedMobileNumber != null && savedMobileNumber.getMobile().equals(checkCalledNumber)) {
-					        model.addAttribute("assignedData", "The given below mobile number is already called. Thank You!");
-					        model.addAttribute("csvRow", csvRow); // Add the current row to the model
-					    } else {
-					        model.addAttribute("csvRow", csvRow); // Add the current row to the model
-					    }
-					} else {
-					    // Handle the case where the CSV row has fewer elements
-					    model.addAttribute("assignedData", "Thank You! You have done your job!");
-					}
-
+					System.out.println("Hitting first method");
+//					if (csvRow.length > 3) {
+//					    String checkCalledNumber = csvRow[3];
+//					    // Proceed with your logic
+//					    InboundReport savedMobileNumber = inboundAddReportService.findReportByMobile(checkCalledNumber);
+//					    if (savedMobileNumber != null && savedMobileNumber.getMobile().equals(checkCalledNumber)) {
+//					        model.addAttribute("assignedData", "The given below mobile number is already called. Thank You!");
+//					        model.addAttribute("csvRow", csvRow); // Add the current row to the model
+//					    } else {
+//					        model.addAttribute("csvRow", csvRow); // Add the current row to the model
+//					    }
+//					} else {
+//					    // Handle the case where the CSV row has fewer elements
+//					    model.addAttribute("assignedData", "Thank You! You have done your job!");
+//					}
+					model.addAttribute("csvRow", csvRow); // Add the current row to the model
 					currentSerialNumber++;
 				}
 
@@ -133,11 +126,7 @@ public class InboundAddReportController {
 		    User userdb = userService.getUserById(loggedInUserId);
 
 		    // If user data is present, encode the profile image to base64
-		    if (userdb != null && userdb.getData() != null) {
-		        byte[] content = userdb.getData(); 
-		        String base64Image = Base64.getEncoder().encodeToString(content);
-		        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-		    }
+//		    userProfile(session, model);
 
 		    // Add user details and title to the model
 		    model.addAttribute("userProfile", userdb);
@@ -151,31 +140,16 @@ public class InboundAddReportController {
 				System.out.println("Min = "+min+""+"Max = "+max);
 				long currentSerialNumber = currentSNo; // Start from minSerialNumber
 				// Fetching csv file data
-				List<String[]> csvData = csvFileService.getCsvData();
+				List<String[]> csvData = taskAssignService.getCSVData(loggedInUserId);
 				List<String[]> csvRows = getCsvRowsBySerialNumberRange(csvData, min, max);
 
 				try {
 					if (currentSerialNumber >= min && currentSerialNumber <= max
 							&& (currentSerialNumber - min) < csvRows.size()) {
 						String[] csvRow = csvRows.get((int) (currentSerialNumber - min)); // Fetch the current row
-
-						// Validate csvRow length
-						if (csvRow.length > 3) {
-							// Checking mobile number, called or not
-							String checkCalledNumber = csvRow[3];
-							System.out.println(checkCalledNumber);
-							InboundReport savedMobileNumber = inboundAddReportService
-									.findReportByMobile(checkCalledNumber);
-							if (savedMobileNumber != null && savedMobileNumber.getMobile().equals(checkCalledNumber)) {
-								model.addAttribute("assignedData",
-										"The given below mobile number is already called. Thank You!");
-								model.addAttribute("csvRow", csvRow); // Add the current row to the model
-							} else {
-								model.addAttribute("csvRow", csvRow); // Add the current row to the model
-							}
-						} else {
-							model.addAttribute("assignedData", "Thank You! You have done your job!");
-						}
+						System.out.println("Hitting second method");
+						
+						model.addAttribute("csvRow", csvRow); // Add the current row to the model
 
 						currentSerialNumber++; // Increment for next row
 					} else {
@@ -201,14 +175,20 @@ public class InboundAddReportController {
 																												
 				// verifying mobile number, already saved in db or not
 				if (inboundReportDb == null) {
-					System.out.println("No Record Found for mobile checking");
+					AssignTask assignedTask = taskAssignService.getAssignedTask(loggedInUserId);
+					report.setAssignTime(assignedTask.getTime());
 					inboundAddReportService.saveInboundReport(report);
+					
+					// Finding connected call and total calls from inbound report table
+					int connectedCalls = inboundAddReportService.connectedCalls(loggedInUserId, "connected", assignedTask.getTime());
+					int totalCalls = inboundAddReportService.totalCalls(loggedInUserId, assignedTask.getTime());
+					System.out.println("connected calls : "+connectedCalls);
+					System.out.println("total calls : "+totalCalls);
+					
+					// Now Update Task Table with total calls and connected calls
+					taskAssignService.updateTask(loggedInUserId, assignedTask.getTime(), totalCalls, connectedCalls);
 				} else {
-					if (inboundReportDb.getMobile().equals(report.getMobile())) {
-						// Mobile number already exists, no need to save
-					} else {
-						inboundAddReportService.saveInboundReport(report);
-					}
+					System.out.println("Mobile number already exist in database");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -220,17 +200,67 @@ public class InboundAddReportController {
 		}
 		return "add-inbound-report";
 	}
+	
+//	=========================================== Generating report by user id and date between ==================
+
+	@PostMapping("/generateReport")
+	@ResponseBody // Ensures that the List<InboundReport> is returned as JSON, so it can be processed by jQuery.
+	public List<AssignTask> generateReport(@RequestParam("userId") Long userId,
+	                                          @RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
+	                                          @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate) {
+	    // Fetch the report data using the service method
+	    List<AssignTask> list = taskAssignService.findReportByUserIdAndDateBetween(userId, fromDate, toDate);
+	    // Returning the list as JSON
+	    return list;
+	}
+	
+
+
+//	=========================================== Generating report by user id and date between ==================
 
 	
 	// Getting csv data by serial number
-	private List<String[]> getCsvRowsBySerialNumberRange(List<String[]> csvData, Long minSerialNumber,
-			Long maxSerialNumber) {
-		List<String[]> selectedRows = new ArrayList<>();
-		for (int i = (int) (minSerialNumber - 1); i < maxSerialNumber && i < csvData.size(); i++) {
-			selectedRows.add(csvData.get(i));
-		}
-		return selectedRows;
+	private List<String[]> getCsvRowsBySerialNumberRange(List<String[]> csvData, Long minSerialNumber, Long maxSerialNumber) {
+	    List<String[]> selectedRows = new ArrayList<>();
+	    
+	    for (int i = (int) (minSerialNumber - 1); i < maxSerialNumber && i < csvData.size(); i++) {
+	        String[] row = csvData.get(i);
+	        String mobileNumberFromCsv = row[3]; // Column 3 corresponds to index 2 in 0-based index
+	        
+	        // Find the report by mobile number from CSV
+	        InboundReport savedMobileNumber = inboundAddReportService.findReportByMobile(mobileNumberFromCsv);
+	        
+	        // Check if the mobile number in the row is different from the one in the database
+	        if (savedMobileNumber == null || !mobileNumberFromCsv.equals(savedMobileNumber.getMobile())) {
+	            selectedRows.add(row);
+	        }
+	    }
+	    
+	    return selectedRows;
 	}
+
+
+	
+	//======================== for profile image ==================
+	private void userProfile(HttpSession session, Model model) {
+		
+		String uid = session.getAttribute("loginUserId").toString();		
+		Long loggedInUserId = Long.parseLong(uid);
+		// getting user details from the database  
+	    User userdb = userService.getUserById(loggedInUserId);
+
+	    // If user data is present, encode the profile image to base64
+	    if (userdb != null && userdb.getData() != null) {
+	        byte[] content = userdb.getData(); 
+	        String base64Image = Base64.getEncoder().encodeToString(content);
+	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
+	    }
+
+	    // Add user details and title to the model
+	    model.addAttribute("userProfile", userdb);
+	    
+	}
+	//======================= profile image end ======================
 	
 
 }

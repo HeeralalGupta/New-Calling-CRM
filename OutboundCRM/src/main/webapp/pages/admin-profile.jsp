@@ -57,7 +57,7 @@
 									<div class="profile-info">
 										<h1>${userProfile.name}</h1>
 										<a href="#" class="email-link">${userProfile.email}</a>
-										<br> <span>Telecaller</span>
+										<br> <span>Team Leader</span>
 
 										<!-- Form starts here -->
 										<form action="updateProfile/${userProfile.id}" method="post" id="profileForm" enctype="multipart/form-data">

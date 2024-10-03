@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.crm.model.AssignTask;
+import com.crm.model.Feedback;
 import com.crm.model.InboundReport;
 import com.crm.model.Report;
 import com.crm.model.User;
 import com.crm.service.AssignTaskService;
+import com.crm.service.FeedbackService;
 import com.crm.service.InboundAddReportService;
 import com.crm.service.ReportService;
 import com.crm.service.UserService;
@@ -40,6 +42,9 @@ public class PageController {
 
 	@Autowired
 	private InboundAddReportService inboundService;
+	
+	@Autowired
+	private FeedbackService feedbackService;
 
 //	===================================== error page ========================================
 	@RequestMapping("/error-page")
@@ -61,6 +66,18 @@ public class PageController {
 		if (session == null || session.getAttribute("userSession") == null) {
 			return "redirect:/error-page";
 		}
+		
+		// Retrieve the user ID from the session and get the user details from the database
+	    Long userId;
+	    try {
+	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+	    } catch (NumberFormatException e) {
+	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+	    }
+
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+		
 		model.addAttribute("title", "Dashboard");
 		return "admin-dashboard";
 	}
@@ -79,23 +96,44 @@ public class PageController {
 	    } catch (NumberFormatException e) {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
+	    // Adding Data Report to dashboard
+	    try {
+	    	AssignTask taskData = assignTask.getAssignedTask(userId);
+//	    	inboundService.countByUserIdAndAssignTime(userId, taskData.geta)
+		    if(taskData != null) {
+		    	Long totalCallDone = inboundService.countReportById(userId);
+			    Long countCallConnected = inboundService.countCallConnected(userId, "connected");
+			    Long todayCalls = inboundService.countReportByIdAndDate(userId);
+			    
+			    model.addAttribute("totalDataAssigned", taskData.getMaxSerialNumber() - taskData.getMinSerialNumber());
+			    model.addAttribute("dataType", taskData.getDataCategory());
+			    model.addAttribute("callingArea", taskData.getCallingAreaName());
+			    model.addAttribute("totalCallDone", totalCallDone);
+			    model.addAttribute("connectedCalls", countCallConnected);
+			    model.addAttribute("todayCallsDone", todayCalls);
+			    model.addAttribute("outStandingData", (taskData.getMaxSerialNumber() - taskData.getMinSerialNumber())-todayCalls);
+		    }else {
+		    	model.addAttribute("totalDataAssigned", "0");
+			    model.addAttribute("dataType", "Not Assigned");
+			    model.addAttribute("callingArea", "Not Assigned");
+			    model.addAttribute("totalCallDone", "0");
+			    model.addAttribute("connectedCalls", "0");
+			    model.addAttribute("todayCallsDone", "0");
+			    model.addAttribute("outStandingData", "0");
+		    }
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 
-	    User userdb = userService.getUserById(userId);
-
-	    // If user data is present, encode the profile image to base64
-	    if (userdb != null && userdb.getData() != null) {
-	        byte[] content = userdb.getData(); 
-	        String base64Image = Base64.getEncoder().encodeToString(content);
-	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-	    }
-
-	    // Add user details and title to the model
-	    model.addAttribute("userProfile", userdb);
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "user-dashboard";
 	}
 
 	// Logout Handler
-	@GetMapping("/login-page")
+	@GetMapping("/login")
 	public String logoutHandler(Model model, HttpSession session) {
 		model.addAttribute("title", "Login");
 		return "login";
@@ -110,7 +148,19 @@ public class PageController {
 		model.addAttribute("title", "Assign Task");
 		List<User> allUser = userService.findAllUser();
 		model.addAttribute("users", allUser);
-		return "add-csv-file";
+		
+		// Retrieve the user ID from the session and get the user details from the database
+	    Long userId;
+	    try {
+	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+	    } catch (NumberFormatException e) {
+	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+	    }
+
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
+		return "assign-task";
 	}
 
 	// Report page
@@ -122,6 +172,17 @@ public class PageController {
 		model.addAttribute("title", "Add Users");
 		List<User> allUser = userService.findAllUser();
 		model.addAttribute("users", allUser);
+		// Retrieve the user ID from the session and get the user details from the database
+	    Long userId;
+	    try {
+	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+	    } catch (NumberFormatException e) {
+	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+	    }
+
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "add-user";
 	}
 
@@ -141,17 +202,9 @@ public class PageController {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
 
-	    User userdb = userService.getUserById(userId);
-
-	    // If user data is present, encode the profile image to base64
-	    if (userdb != null && userdb.getData() != null) {
-	        byte[] content = userdb.getData(); 
-	        String base64Image = Base64.getEncoder().encodeToString(content);
-	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-	    }
-
-	    // Add user details and title to the model
-	    model.addAttribute("userProfile", userdb);
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "add-report";
 	}
 
@@ -177,17 +230,9 @@ public class PageController {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
 
-	    User userdb = userService.getUserById(userId);
-
-	    // If user data is present, encode the profile image to base64
-	    if (userdb != null && userdb.getData() != null) {
-	        byte[] content = userdb.getData(); 
-	        String base64Image = Base64.getEncoder().encodeToString(content);
-	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-	    }
-
-	    // Add user details and title to the model
-	    model.addAttribute("userProfile", userdb);
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "view-report";
 	}
 
@@ -210,17 +255,9 @@ public class PageController {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
 
-	    User userdb = userService.getUserById(userId);
-
-	    // If user data is present, encode the profile image to base64
-	    if (userdb != null && userdb.getData() != null) {
-	        byte[] content = userdb.getData(); 
-	        String base64Image = Base64.getEncoder().encodeToString(content);
-	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-	    }
-
-	    // Add user details and title to the model
-	    model.addAttribute("userProfile", userdb);
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "update-rural-report";
 	}
 
@@ -242,17 +279,9 @@ public class PageController {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
 
-	    User userdb = userService.getUserById(userId);
-
-	    // If user data is present, encode the profile image to base64
-	    if (userdb != null && userdb.getData() != null) {
-	        byte[] content = userdb.getData(); 
-	        String base64Image = Base64.getEncoder().encodeToString(content);
-	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-	    }
-
-	    // Add user details and title to the model
-	    model.addAttribute("userProfile", userdb);
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "update-urban-report";
 	}
 
@@ -277,17 +306,9 @@ public class PageController {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
 
-	    User userdb = userService.getUserById(userId);
-
-	    // If user data is present, encode the profile image to base64
-	    if (userdb != null && userdb.getData() != null) {
-	        byte[] content = userdb.getData(); 
-	        String base64Image = Base64.getEncoder().encodeToString(content);
-	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-	    }
-
-	    // Add user details and title to the model
-	    model.addAttribute("userProfile", userdb);
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "add-inbound-report";
 
 	}
@@ -313,18 +334,10 @@ public class PageController {
 	    } catch (NumberFormatException e) {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
-
-	    User userdb = userService.getUserById(userId);
-
-	    // If user data is present, encode the profile image to base64
-	    if (userdb != null && userdb.getData() != null) {
-	        byte[] content = userdb.getData(); 
-	        String base64Image = Base64.getEncoder().encodeToString(content);
-	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-	    }
-
-	    // Add user details and title to the model
-	    model.addAttribute("userProfile", userdb);
+	    
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "view-inbound-report";
 	}
 
@@ -354,6 +367,18 @@ public class PageController {
 		// Add the mapping and tasks to the model
 		model.addAttribute("userIdToUserName", userIdToUserName);
 		model.addAttribute("tasks", allAssignedTask);
+		
+		// Retrieve the user ID from the session and get the user details from the database
+	    Long userId;
+	    try {
+	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+	    } catch (NumberFormatException e) {
+	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+	    }
+
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "view-assigned-task";
 	}
 
@@ -366,6 +391,18 @@ public class PageController {
 		model.addAttribute("title", "View Daily Report");
 		List<User> users = userService.findAllUser();
 		model.addAttribute("users", users);
+		
+		// Retrieve the user ID from the session and get the user details from the database
+	    Long userId;
+	    try {
+	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+	    } catch (NumberFormatException e) {
+	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+	    }
+
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+		
 		return "view-daily-report";
 	}
 
@@ -377,6 +414,18 @@ public class PageController {
 		model.addAttribute("title", "Daily Report Detials");
 		List<User> users = userService.findAllUser();
 		model.addAttribute("users", users);
+		
+		// Retrieve the user ID from the session and get the user details from the database
+	    Long userId;
+	    try {
+	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+	    } catch (NumberFormatException e) {
+	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+	    }
+
+	    // Calling userProfile method form given below
+	    userProfile(model, session, userId);
+	    
 		return "daily-report-detials";
 	}
 
@@ -394,19 +443,29 @@ public class PageController {
 	    } catch (NumberFormatException e) {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
-
-	    User userdb = userService.getUserById(userId);
-
-	    // If user data is present, encode the profile image to base64
-	    if (userdb != null && userdb.getData() != null) {
-	        byte[] content = userdb.getData(); 
-	        String base64Image = Base64.getEncoder().encodeToString(content);
-	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
-	    }
-
-	    // Add user details and title to the model
-	    model.addAttribute("userProfile", userdb);
+	    userProfile(model, session, userId);
+	    
 		return "feedback";
+	}
+	
+	@RequestMapping("/check-feedback")
+	public String checkFeedback(Model model, HttpSession session) {
+		if (session == null || session.getAttribute("userSession") == null) {
+			return "redirect:/error-page";
+		}
+		// Retrieve the user ID from the session and get the user details from the database
+	    Long userId;
+	    try {
+	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+	    } catch (NumberFormatException e) {
+	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+	    }
+	    userProfile(model, session, userId);
+	    
+		List<Feedback> findFeedback = feedbackService.findFeedback();
+		model.addAttribute("feedbacks",findFeedback);
+		model.addAttribute("title","check feedbacks");
+		return "check-feedback";
 	}
 	
 	@RequestMapping("/user-profile")
@@ -446,6 +505,21 @@ public class PageController {
 	    	return "admin-profile";
 	    }
 	    
+	}
+	
+	private void userProfile(Model model, HttpSession session, Long userId) {
+
+	    User userdb = userService.getUserById(userId);
+
+	    // If user data is present, encode the profile image to base64
+	    if (userdb != null && userdb.getData() != null) {
+	        byte[] content = userdb.getData(); 
+	        String base64Image = Base64.getEncoder().encodeToString(content);
+	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
+	    }
+
+	    // Add user details and title to the model
+	    model.addAttribute("userProfile", userdb);
 	}
 
 

@@ -39,7 +39,7 @@
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
-								<h4 class="card-description text-info text-bold">Calling Detials</h4>
+								<h4 class="card-description text-info text-bold">Calling Details</h4>
 								<div class="table-responsive">
 									<table class="table">
 										<thead>

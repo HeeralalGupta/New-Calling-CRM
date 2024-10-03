@@ -34,14 +34,19 @@
 					</nav>
 				</div>
 				<!-- ===================== Page body starts ============================================ -->
-	
+				<%
+				if (session.getAttribute("successMessage") != null) {
+					out.print("<script>Swal.fire({ title: 'Your response has been sent successfully!', text: 'Thank You!', icon: 'success'});</script>");
+					session.removeAttribute("successMessage");
+				}
+				%>
 				<div class="row">
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
 								<h4 class="card-description text-info text-bold">Write Feedback</h4>
 
-								<form action="" method="post" class="form-sample">
+								<form action="saveFeedback" method="post" class="form-sample">
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group row">
@@ -65,10 +70,10 @@
 										</div>
 										<div class="col-md-4">
 											<div class="form-group row">
-												<label class="col-sm-3 col-form-label">Note :</label>
+												<label class="col-sm-3 col-form-label">Comments :</label>
 												<div class="col-sm-9">
-													<textarea name="note" class="form-control"
-														placeholder="Note"></textarea>
+													<textarea name="comments" class="form-control"
+														placeholder="Comments" required></textarea>
 												</div>
 											</div>
 										</div>

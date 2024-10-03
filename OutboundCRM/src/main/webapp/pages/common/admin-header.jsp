@@ -42,7 +42,8 @@
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
                 <a class="dropdown-item" href="user-profile">
-                  <i class="mdi mdi-account-circle mr-2 text-success"></i> Profile </a>
+                  <img src="data:${userProfile.fileType};base64,${userProfile.fileName}" alt="image"
+                  onerror="this.onerror=null;this.src='assets/images/faces/user.png';" width="20px" height="20px" class="mr-2 rounded-circle"> Profile </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="logout">
                   <i class="mdi mdi-logout mr-2 text-primary"></i> Signout </a>

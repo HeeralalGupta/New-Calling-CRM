@@ -23,7 +23,7 @@
 					<h3 class="page-title">
 						<span class="page-title-icon bg-gradient-primary text-white mr-2">
 							<i class="mdi mdi-upload"></i>
-						</span> Upload CSV File
+						</span> Assign Data To Telecaller
 					</h3>
 					<nav aria-label="breadcrumb">
 						<ul class="breadcrumb">
@@ -46,7 +46,7 @@
 				}
 				%>
 				<!-- Upload Csv file -->
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
@@ -64,8 +64,9 @@
 												<div class="col-sm-9">
 													<div class="custom-file">
 														<input type="file" name="file" class="custom-file-input"
-															id="customFile" required> <label class="custom-file-label"
-															for="customFile">Choose file</label>
+															id="customFile" required> <label
+															class="custom-file-label" for="customFile">Choose
+															file</label>
 													</div>
 												</div>
 											</div>
@@ -79,7 +80,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 				<!-- Assign Task to user -->
 				<%
@@ -89,10 +90,17 @@
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
-								<h4 class="card-description text-info text-bold">Assign
-									Task</h4>
-
-								<form action="assignTask" method="post"
+								<div class="row">
+									<div class="col-md-6">
+										<h4 class="card-description text-info text-bold">Assign Task</h4>
+									</div>
+									<div class="col-md-6 float-right">
+										<!-- Error message section -->
+										<div id="error-message" style="color: red; display: none;"></div>
+									</div>
+								</div>
+															
+								<form action="assignTask" method="post" id="validateSerialNumber"
 									enctype="multipart/form-data" class="form-sample">
 									<div class="row">
 										<div class="col-md-4">
@@ -120,25 +128,25 @@
 										</div>
 										<div class="col-md-4">
 											<div class="form-group row">
-												<label class="col-sm-3 col-form-label">CSV Min S.No.</label>
+												<label class="col-sm-3 col-form-label">Min Row</label>
 												<div class="col-sm-9">
-													<input type="number" id="minSerialNumber"
-														name="minSerialNumber" class="form-control"
-														placeholder="Min" oninput="validateSerialNumbers()" required/>
+													<input type="number" id="minSerialNumber" name="minSerialNumber"
+														class="form-control" placeholder="Min" required />
+												</div>
+											</div>
+										</div>
+										
+										<div class="col-md-4">
+											<div class="form-group row">
+												<label class="col-sm-3 col-form-label">Max Row</label>
+												<div class="col-sm-9">
+													<input type="number" id="maxSerialNumber" name="maxSerialNumber"
+														class="form-control" placeholder="Max" required />
 												</div>
 											</div>
 										</div>
 
-										<div class="col-md-4">
-											<div class="form-group row">
-												<label class="col-sm-3 col-form-label">CSV Max S.No.</label>
-												<div class="col-sm-9">
-													<input type="number" id="maxSerialNumber"
-														name="maxSerialNumber" class="form-control"
-														placeholder="Max" oninput="validateSerialNumbers()" required/>
-												</div>
-											</div>
-										</div>
+
 										<div class="col-md-4">
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">Category</label>
@@ -150,7 +158,43 @@
 														<option>Common Citizen</option>
 														<option>Sevika</option>
 														<option>Sahaika</option>
+														<option>Sahiya</option>
+														<option>Para Teacher</option>
+														<option>Sanyojika</option>
+														<option>BJP</option>
+														<option>MMMSY</option>
+														<option>Jalsahiya</option>
 													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group row">
+												<label class="col-sm-3 col-form-label">Calling Area
+													Name</label>
+												<div class="col-sm-9">
+													<input type="text" id="callingAreaName"
+														name="callingAreaName" class="form-control"
+														placeholder="Area Name" required />
+												</div>
+											</div>
+										</div>
+
+										
+									</div>
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group row">
+												<label class="col-sm-3 col-form-label">Upload File<span
+													style="color: red;">*</span>
+												</label>
+												<div class="col-sm-9">
+													<div class="custom-file">
+														<input type="file" name="file" class="custom-file-input"
+															id="customFile" required> <label
+															class="custom-file-label" for="customFile">Choose
+															file</label>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -197,17 +241,28 @@
 	</script>
 	<!-- Checking min serial number is always less than max -->
 	<script>
-		function validateSerialNumbers() {
-			const minSerial = document.getElementById('minSerialNumber').value;
-			const maxSerial = document.getElementById('maxSerialNumber').value;
+	document.getElementById("validateSerialNumber").addEventListener("submit", function(event) {
+	    var minSerial = document.getElementById("minSerialNumber").value;
+	    var maxSerial = document.getElementById("maxSerialNumber").value;
+	    var errorMessage = document.getElementById("error-message");
 
-			if (minSerial && maxSerial) {
-				if (parseInt(minSerial) >= parseInt(maxSerial)) {
-					alert('Min S.No. must be less than Max S.No.');
-					document.getElementById('minSerialNumber').value = '';
-				}
-			}
-		}
+	    // Convert values to numbers
+	    var minValue = Number(minSerial);
+	    var maxValue = Number(maxSerial);
+
+	    // Reset error message display
+	    errorMessage.style.display = "none";
+
+	    // Check if both values are filled and if Min is greater than or equal to Max
+	    if (minSerial && maxSerial) {
+	        if (minValue >= maxValue) {
+	            event.preventDefault();  // Prevent form submission
+	            errorMessage.style.display = "block";
+	            errorMessage.innerText = "Min Row should be less than Max Row.";
+	        }
+	    }
+	});
+
 	</script>
 </body>
 </html>

@@ -5,39 +5,34 @@
 <html>
 <head>
 <%@ include file="common/head.jsp"%>
-<style type="text/css">
-.connected {
-	background-color: lightgreen;
-	width: auto;
-	padding: 5px;
-	color: darkgreen;
-	border-radius: 5px;
-	text-align: center;
+<style>
+.assignedRow {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.not-connected {
-	background-color: #FF7F7F;
-	width: auto;
-	padding: 5px;
-	color: #8B0000;
-	border-radius: 5px;
-	text-align: center;
+.totalAssignedTask {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: green;
+	padding: 7px;
+	border-radius: 4px;
+	width: 50px;
+	color: white;
 }
-/* Pagination */
-
 
 </style>
-
 </head>
 <body>
 
-	<%@ include file="common/header.jsp"%>
-
+	<%@ include file="common/admin-header.jsp"%>
 
 	<!-- partial -->
 	<div class="container-fluid page-body-wrapper">
 		<!-- partial:partials/_sidebar.html -->
-		<%@ include file="common/sidebar.jsp"%>
+		<%@ include file="common/admin-sidebar.jsp"%>
 		<!-- partial -->
 		<div class="main-panel">
 			<div class="content-wrapper">
@@ -45,8 +40,8 @@
 				<div class="page-header">
 					<h3 class="page-title">
 						<span class="page-title-icon bg-gradient-primary text-white mr-2">
-							<i class="mdi mdi-eye"></i>
-						</span> View Inbound Report
+							<i class="mdi mdi-message-text-outline"></i>
+						</span> View Feedback
 					</h3>
 					<nav aria-label="breadcrumb">
 						<ul class="breadcrumb">
@@ -58,15 +53,15 @@
 					</nav>
 				</div>
 				<!-- ===================== Page body starts ============================================ -->
-				<!-- Urban Table -->
-				<div class="row">
-					<div class="col-12 grid-margin">
+
+				<div class="row mt-4">
+					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
 								<!-- Search input -->
 								<div class="row align-items-center">
 									<div class="col-md-4">
-										<h4 class="card-title">Called Number</h4>
+										<h4 class="card-title">Feedbacks</h4>
 									</div>
 									<div class="col-md-4 d-flex align-items-center">
 										<div class="number-of-rows mr-2">
@@ -89,7 +84,7 @@
 									<div class="col-md-4 mb-3">
 										<div class="input-group">
 											<input type="text" class="form-control"
-												placeholder="Type to search" id="u-search"
+												placeholder="Type to search" id="search"
 												onkeyup="myFunction()" aria-describedby="basic-addon2">
 											<div class="input-group-append">
 												<button class="btn btn-sm btn-gradient-primary"
@@ -98,63 +93,29 @@
 										</div>
 									</div>
 								</div>
-
 								<div class="table-responsive">
-									<table class="table table-striped table-class" id="table-id">
+									<table class="table table-class" id="taskTable">
 										<thead>
-											<tr class="text-info">
+											<tr class="text-center">
 												<th>S.No.</th>
-												<th>Call Connected</th>
-												<th>Call Not Connected</th>
+												<th>Date</th>
 												<th>Name</th>
 												<th>Email</th>
-												<th>Mobile</th>
-												<th>Alternate Mobile</th>
-												<th>Profession</th>
-												<th>Gender</th>
-												<th>Age</th>
-												<th>District</th>
-												<th>Lok Sabha</th>
-												<th>Vidhan Sabha</th>
-												<th>Sub Divisional</th>
-												<th>Calling For</th>
-												<th>Date</th>
-												<th>Note</th>
-												<!-- <th colspan="2" class="text-center">Action</th> -->
+												<th>Comments</th>
+												<th>Action</th>
 											</tr>
 										</thead>
-										<tbody id="urbanTable">
-											<c:forEach var="callerReport" items="${callerDataList}"
-												varStatus="sno">
-												<tr>
+										<tbody>
+											<c:forEach var="feedback" items="${feedbacks}" varStatus="sno">
+												<tr class="text-center">
 													<td>${sno.count}</td>
-													<td><div class="connected">${callerReport.callConnected}</div></td>
-													<td><div class="not-connected">${callerReport.callNotConnected}</div></td>
-													<td>${callerReport.name}</td>
-													<td>${callerReport.email}</td>
-													<td>${callerReport.mobile}</td>
-													<td>${callerReport.alternateMobile}</td>
-													<td>${callerReport.profession}</td>
-													<td>${callerReport.gender}</td>
-													<td>${callerReport.age}</td>
-													<td>${callerReport.urbanDistrict}</td>
-													<td>${callerReport.lokSabha}</td>
-													<td>${callerReport.vidhanSabha}</td>
-													<td>${callerReport.subDivision}</td>
-													<td>${callerReport.callingFor}</td>
-													<td>${callerReport.date}</td>
-													<td>${callerReport.note}</td>
-
-													<%-- <td class="text-right"><a href="javascript:void(0);"
-														onclick="deleteReport('${callerReport.id}')"
-														class="btn btn-danger">Delete</a></td>
-													<td class="text-left">
-														<form method="post" action="urbanEdit">
-															<input type="hidden" name="callerReportId"
-																value="${callerReport.id}">
-															<button type="submit" class="btn btn-primary">Update</button>
-														</form>
-													</td> --%>
+													<th>${feedback.date}</th>
+													<td>${feedback.name}</td>
+													<td>${feedback.email}</td>
+													<td>${feedback.comments}</td>
+													<td><a href="javascript:void(0);"
+														onclick="deleteFeedback('${feedback.id}')"><img
+															src="assets/images/delete-icon.png"></a></td>
 												</tr>
 											</c:forEach>
 										</tbody>
@@ -174,11 +135,11 @@
 									</div>
 									<!--End Pagination -->
 								</div>
-
 							</div>
 						</div>
 					</div>
 				</div>
+
 				<!-- ===================== Page body ends ============================================== -->
 
 			</div>
@@ -193,6 +154,36 @@
 	<!-- container-scroller -->
 	<!-- plugins:js -->
 	<%@ include file="common/scripts.jsp"%>
+	<script>
+		/* Deleting */
+		function deleteFeedback(feedbackId){
+			Swal.fire({
+				  title: 'Are you sure?',
+				  text: "You won't be able to revert this!",
+				  icon: 'warning',
+				  showCancelButton: true,
+				  confirmButtonColor: '#3085d6',
+				  cancelButtonColor: '#d33',
+				  confirmButtonText: 'Delete'
+				}).then((result) => {
+				  if (result.isConfirmed) {
+				   window.location="/deleteFeedback/"+feedbackId;
+				  }
+				  else{
+					  swal("Your job is safe !!!")
+				  }
+				})
+			}
+			/* Searching */
+			$(document).ready(function(){
+			  $("#search").on("keyup", function() {
+			    var value = $(this).val().toLowerCase();
+			    $("#taskTable tr").filter(function() {
+			      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			    });
+			  });
+			});
+	</script>
 	<!-- End custom js for this page -->
 </body>
 </html>

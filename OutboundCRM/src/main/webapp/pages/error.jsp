@@ -17,7 +17,7 @@
 		no longer here.
 	</p>
 	<div align="center">
-		<a class="btn-back" href="login-page">Back to login page</a>
+		<a class="btn-back" href="login">Back to login page</a>
 	</div>
 	<img src="https://assets.codepen.io/1538474/astronaut.svg" class="astronaut" />
 	<img src="https://assets.codepen.io/1538474/spaceship.svg" class="spaceship" />

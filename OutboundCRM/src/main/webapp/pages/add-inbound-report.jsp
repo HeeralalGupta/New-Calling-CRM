@@ -542,13 +542,13 @@
 														cursorshover="true">Save & Next</button>
 												</div>
 											</c:if>
-											<c:if test="${assignedData != null}">
+											<%-- <c:if test="${assignedData != null}">
 												<div class="col-md-6">
 													<button type="submit"
 														class="btn btn-gradient-primary btn-fw"
 														cursorshover="true">Skip</button>
 												</div>
-											</c:if>
+											</c:if> --%>
 										</div>
 									</c:if>
 								</form>

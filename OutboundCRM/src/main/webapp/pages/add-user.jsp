@@ -131,9 +131,43 @@
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
-								<h4 class="card-description text-info text-bold">List of Telecaller</h4>
+								<!-- Search input -->
+								<div class="row align-items-center">
+									<div class="col-md-4">
+										<h4 class="card-title">Telecaller List</h4>
+									</div>
+									<div class="col-md-4 d-flex align-items-center">
+										<div class="number-of-rows mr-2">
+											<p>Select No. of Rows:</p>
+										</div>
+										<div class="form-group">
+											<!-- Show Numbers Of Rows -->
+											<select class="form-control" name="state" id="maxRows">
+												<option value="5000">Show ALL Rows</option>
+												<option value="5">5</option>
+												<option value="10">10</option>
+												<option value="15">15</option>
+												<option value="20">20</option>
+												<option value="50">50</option>
+												<option value="70">70</option>
+												<option value="100">100</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-4 mb-3">
+										<div class="input-group">
+											<input type="text" class="form-control"
+												placeholder="Type to search" id="search"
+												onkeyup="myFunction()" aria-describedby="basic-addon2">
+											<div class="input-group-append">
+												<button class="btn btn-sm btn-gradient-primary"
+													type="button" cursorshover="true">Search</button>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="table-responsive">
-									<table class="table">
+									<table class="table table-class" id="addUserTable">
 										<thead>
 											<tr>
 												<th>S.No.</th>
@@ -153,6 +187,20 @@
 											</c:forEach>
 										</tbody>
 									</table>
+									<!--Start Pagination -->
+									<div class='pagination-container my-3'>
+										<nav>
+											<ul class="pagination">
+
+												<li data-page="prev"><span class="prev"> Prev <span
+														class="sr-only current">(current)</span></span></li>
+												<!--	Here the JS Function Will Add the Rows -->
+												<li data-page="next" id="prev"><span class="next"> Next <span
+														class="sr-only current">(current)</span></span></li>
+											</ul>
+										</nav>
+									</div>
+									<!--End Pagination -->
 								</div>
 							</div>
 						</div>
@@ -192,6 +240,15 @@
 				  }
 				})
 		}
+		/* Searching */
+		$(document).ready(function(){
+		  $("#search").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#addUserTable tr").filter(function() {
+		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});
 		</script>
 </body>
 </html>
