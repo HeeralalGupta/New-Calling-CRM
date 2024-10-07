@@ -23,6 +23,7 @@ public class DailyReportController {
 	@Autowired
 	private UserService userService;
 	
+	
 	@GetMapping("/report-details")
 	public String countReport(@RequestParam("id") Long id , Model model, HttpSession session) {
 		Long countReportByIdAndDate = inboundService.countReportByIdAndDate(id);
@@ -47,7 +48,7 @@ public class DailyReportController {
 
 	    User userdb = userService.getUserById(userId);
 	    
-	    boolean userRole = userdb.isAdmin();
+	    String userRole = userdb.getRole();
 	   System.out.println(userRole);
 	    // If user data is present, encode the profile image to base64
 	    if (userdb != null && userdb.getData() != null) {
@@ -60,4 +61,7 @@ public class DailyReportController {
 	    
 		return "daily-report-details";
 	}
+	
+
+	
 }

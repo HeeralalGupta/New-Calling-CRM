@@ -69,30 +69,20 @@ public class InboundAddReportController {
 				// Fetching csv file data
 				List<String[]> csvData = taskAssignService.getCSVData(loggedInUserId);	
 				List<String[]> csvRows = getCsvRowsBySerialNumberRange(csvData, min, max);
-
-				if ((currentSerialNumber <= max && currentSerialNumber <= csvRows.size())) {
+				System.out.println("Initial values: currentSerialNumber = " + currentSerialNumber + ", max = " + max + ", csvRows.size() = " + csvRows.size());
+				
+				if ((currentSerialNumber <= max && csvRows.size() != 0)) {
 					// Note: Iterate this string and set one row to one model
-					String[] csvRow = csvRows.get((int) (currentSerialNumber-1)); // Fetch the current row				
+					String[] csvRow = csvRows.get((int) (0)); // Fetch the current row				
 					// Checking mobile number, called or not
 					System.out.println("Hitting first method");
-//					if (csvRow.length > 3) {
-//					    String checkCalledNumber = csvRow[3];
-//					    // Proceed with your logic
-//					    InboundReport savedMobileNumber = inboundAddReportService.findReportByMobile(checkCalledNumber);
-//					    if (savedMobileNumber != null && savedMobileNumber.getMobile().equals(checkCalledNumber)) {
-//					        model.addAttribute("assignedData", "The given below mobile number is already called. Thank You!");
-//					        model.addAttribute("csvRow", csvRow); // Add the current row to the model
-//					    } else {
-//					        model.addAttribute("csvRow", csvRow); // Add the current row to the model
-//					    }
-//					} else {
-//					    // Handle the case where the CSV row has fewer elements
-//					    model.addAttribute("assignedData", "Thank You! You have done your job!");
-//					}
+
 					model.addAttribute("csvRow", csvRow); // Add the current row to the model
 					currentSerialNumber++;
+				}else {
+					model.addAttribute("assignedData","No data assigned for you");
 				}
-
+				
 				model.addAttribute("currentSerialNumber", currentSerialNumber);
 				model.addAttribute("tcId", task.getAssignId());
 				// model.addAttribute("csvRows", csvRows);
@@ -113,7 +103,7 @@ public class InboundAddReportController {
 	public String iterateAndSubmit(@ModelAttribute InboundReport report,
 			@RequestParam("currentSerialNumber") long currentSNo, HttpSession session, Model model)
 			throws NullPointerException, ArrayIndexOutOfBoundsException, NumberFormatException {
-
+		System.out.println("Hitting first method");
 		try {
 			// Fetching min and max csv serial number
 			String uid = session.getAttribute("userSession").toString();
@@ -126,7 +116,7 @@ public class InboundAddReportController {
 		    User userdb = userService.getUserById(loggedInUserId);
 
 		    // If user data is present, encode the profile image to base64
-//		    userProfile(session, model);
+		    //userProfile(session, model);
 
 		    // Add user details and title to the model
 		    model.addAttribute("userProfile", userdb);
@@ -144,8 +134,7 @@ public class InboundAddReportController {
 				List<String[]> csvRows = getCsvRowsBySerialNumberRange(csvData, min, max);
 
 				try {
-					if (currentSerialNumber >= min && currentSerialNumber <= max
-							&& (currentSerialNumber - min) < csvRows.size()) {
+					if (currentSerialNumber >= min && currentSerialNumber <= max && (currentSerialNumber - min) < csvRows.size()) {
 						String[] csvRow = csvRows.get((int) (currentSerialNumber - min)); // Fetch the current row
 						System.out.println("Hitting second method");
 						
@@ -207,13 +196,13 @@ public class InboundAddReportController {
 	@ResponseBody // Ensures that the List<InboundReport> is returned as JSON, so it can be processed by jQuery.
 	public List<AssignTask> generateReport(@RequestParam("userId") Long userId,
 	                                          @RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
-	                                          @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate) {
+	                                          @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate, HttpSession session) {
 	    // Fetch the report data using the service method
 	    List<AssignTask> list = taskAssignService.findReportByUserIdAndDateBetween(userId, fromDate, toDate);
-	    // Returning the list as JSON
+	    // Returning the list as JSON   
+	    session.setAttribute("generateUserId", userId);
 	    return list;
 	}
-	
 
 
 //	=========================================== Generating report by user id and date between ==================

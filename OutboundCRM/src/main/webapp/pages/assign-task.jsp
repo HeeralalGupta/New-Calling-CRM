@@ -23,7 +23,7 @@
 					<h3 class="page-title">
 						<span class="page-title-icon bg-gradient-primary text-white mr-2">
 							<i class="mdi mdi-upload"></i>
-						</span> Assign Data To Telecaller
+						</span> Tasks
 					</h3>
 					<nav aria-label="breadcrumb">
 						<ul class="breadcrumb">
@@ -128,25 +128,25 @@
 										</div>
 										<div class="col-md-4">
 											<div class="form-group row">
-												<label class="col-sm-3 col-form-label">Min Row</label>
+												<label class="col-sm-3 col-form-label">Data Area</label>
 												<div class="col-sm-9">
-													<input type="number" id="minSerialNumber" name="minSerialNumber"
-														class="form-control" placeholder="Min" required />
+													<input type="text" id="callingAreaName"
+														name="callingAreaName" class="form-control"
+														placeholder="Area Name" required />
 												</div>
 											</div>
 										</div>
-										
 										<div class="col-md-4">
 											<div class="form-group row">
-												<label class="col-sm-3 col-form-label">Max Row</label>
+												<label class="col-sm-3 col-form-label">PIN Code<span
+													style="color: red;">*</span></label>
 												<div class="col-sm-9">
-													<input type="number" id="maxSerialNumber" name="maxSerialNumber"
-														class="form-control" placeholder="Max" required />
+													<input type="tel" name="pinCode" class="form-control" maxlength="6"
+       													pattern="[0-9]{6}" inputmode="numeric" placeholder="PIN Code" 
+       													title="PIN code must be 6 digits" required />
 												</div>
 											</div>
 										</div>
-
-
 										<div class="col-md-4">
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">Category</label>
@@ -168,21 +168,27 @@
 												</div>
 											</div>
 										</div>
+										
 										<div class="col-md-4">
 											<div class="form-group row">
-												<label class="col-sm-3 col-form-label">Calling Area
-													Name</label>
+												<label class="col-sm-3 col-form-label">Min Row</label>
 												<div class="col-sm-9">
-													<input type="text" id="callingAreaName"
-														name="callingAreaName" class="form-control"
-														placeholder="Area Name" required />
+													<input type="number" id="minSerialNumber" name="minSerialNumber"
+														class="form-control" placeholder="Min" required />
 												</div>
 											</div>
 										</div>
-
 										
-									</div>
-									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group row">
+												<label class="col-sm-3 col-form-label">Max Row</label>
+												<div class="col-sm-9">
+													<input type="number" id="maxSerialNumber" name="maxSerialNumber"
+														class="form-control" placeholder="Max" required />
+												</div>
+											</div>
+										</div>
+										
 										<div class="col-md-4">
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">Upload File<span
@@ -198,12 +204,12 @@
 												</div>
 											</div>
 										</div>
+										
 									</div>
-
+					
 									<div class="row">
 										<div class="col-md-12">
-											<button type="submit" class="btn btn-gradient-primary btn-fw"
-												cursorshover="true">Submit</button>
+											<button type="submit" class="btn btn-gradient-primary btn-fw">Submit</button>
 										</div>
 									</div>
 

@@ -36,37 +36,37 @@
             
              <li class="nav-item">
               <a class="nav-link" href="add-user">
-                <span class="menu-title">Add Telecaller</span>
+                <span class="menu-title">User</span>
                 <i class="mdi mdi-account-multiple-plus menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="add-csv">
-                <span class="menu-title">Assign Task</span>
-                <i class="mdi mdi-file menu-icon"></i>
+                <span class="menu-title">Task</span>
+                <i class="mdi mdi-upload menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="view-task">
-                <span class="menu-title">View Assigned Task</span>
+                <span class="menu-title">Summary</span>
                 <i class="mdi mdi-format-list-bulleted-type menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="daily-report">
-                <span class="menu-title">Generate Report</span>
+                <span class="menu-title">Report</span>
                 <i class="mdi mdi-eye menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
-                <span class="menu-title">Data Bank</span>
+                <span class="menu-title">Database</span>
                 <i class="mdi mdi-database-plus menu-icon"></i>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="check-feedback">
-                <span class="menu-title">Check Feedback</span>
+                <span class="menu-title">Feedback</span>
                 <i class="mdi mdi-message-text-outline menu-icon"></i>
               </a>
             </li>

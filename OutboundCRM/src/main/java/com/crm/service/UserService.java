@@ -26,7 +26,7 @@ public class UserService {
 	
 	@Transactional
 	public List<User> findAllUser() {
-		return userRepository.findByIsAdmin(false);
+		return userRepository.findByRole("user");
 	}
 	
 	public void deleteUser(Long id) {
@@ -54,5 +54,17 @@ public class UserService {
     	dbUser.setData(file.getBytes());
     	return userRepository.save(dbUser);
     }
+    
+    // Updating user
+    public User upateUser(User user, Long id) {
+    	User userdb = userRepository.findById(id).orElse(null);
+    	userdb.setName(user.getName());
+    	userdb.setMobile(user.getMobile());
+    	userdb.setEmail(user.getEmail());
+    	userdb.setPassword(user.getPassword());
+    	userdb.setStatus(user.getStatus());
+    	return userRepository.save(userdb);
+    }
+    
 	
 }

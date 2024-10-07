@@ -1,7 +1,5 @@
 package com.crm.controller;
 
-import java.util.Base64;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +23,8 @@ public class LoginController {
 	@PostMapping("/login")
 	public String login(@ModelAttribute User user, Model model, HttpSession session) {
 
-		User admin = loginService.adminLogin(true, user.getEmail());
-		User users = loginService.adminLogin(false, user.getEmail());
+		User admin = loginService.adminLogin("admin", user.getEmail());
+		User users = loginService.adminLogin("user", user.getEmail());
 
 		if (admin != null && user.getPassword().equals(admin.getPassword())) {
 			try {
@@ -34,29 +32,31 @@ public class LoginController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			User userDB = loginService.adminLogin(true, user.getEmail());
+			User userDB = loginService.adminLogin("admin", user.getEmail());
 			
 			session.setAttribute("loginUserId", userDB.getId());
 			session.setAttribute("userProflie", admin);
 			model.addAttribute("title", "Dashboard");
 			return "redirect:/admin-dashboard";
 			
-		} else if (users != null && user.getPassword().equals(users.getPassword())) {
+		} else if (users != null && user.getPassword().equals(users.getPassword()) && users.getStatus().equals("Active")) {
 
 			try {
 				session.setAttribute("userSession", users.getId());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			User userDB = loginService.adminLogin(false, user.getEmail());
+			User userDB = loginService.adminLogin("user", user.getEmail());
 
 			session.setAttribute("loginUserId", userDB.getId());
 			session.setAttribute("userProfile", users);
 			model.addAttribute("title", "Dashboard");
 			return "redirect:/user-dashboard";
-		} else {
-			model.addAttribute("errorMsg", "Username or password is incorrect!");
-			System.out.println("Failed");
+		} else if(users.getStatus().equals("Inactive")) {
+			model.addAttribute("errorMsg", "You are inactive !");
+			return "login";
+		}else {
+			model.addAttribute("errorMsg", "Username or password is incorrect !");
 			return "login";
 		}
 

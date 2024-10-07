@@ -7,5 +7,5 @@ import com.crm.model.User;
 
 @Repository
 public interface LoginRepository extends JpaRepository<User, Long>{
-	public User findByIsAdminAndEmail(boolean role, String email);
+	public User findByRoleAndEmail(String role, String email);
 }

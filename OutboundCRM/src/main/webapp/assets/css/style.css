@@ -4507,6 +4507,7 @@ pre code {
   width: 100%;
   margin-bottom: 1rem;
   color: #212529;
+  border: 1px solid lightgray;
 }
 
 .table th,
@@ -18087,7 +18088,8 @@ dl li {
   border-top: 0;
   border-bottom-width: 1px;
   font-family: "ubuntu-medium", sans-serif;
-  font-weight: initial;
+  font-weight: bold;
+  background: #f1f1f1;
 }
 
 .table thead th i {
@@ -18554,6 +18556,7 @@ dl li {
   border-radius: 100%;
   border: 2px solid #ffffff;
   bottom: 5px;
+  font-weight:600;
   right: -5px;
 }
 
@@ -18856,7 +18859,8 @@ dl li {
   font-family: "ubuntu-regular", sans-serif;
   padding: 0;
   width: 260px;
-  
+  font-weight: bold;
+  font-family: helvetica;
   z-index: 11;
   transition: width 0.25s ease, background 0.25s ease;
   -webkit-transition: width 0.25s ease, background 0.25s ease;

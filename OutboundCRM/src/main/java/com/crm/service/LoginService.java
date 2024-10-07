@@ -14,7 +14,7 @@ public class LoginService {
 	private LoginRepository loginRepository;
 	
 	@Transactional
-	public User adminLogin(boolean role, String email) {
-		return loginRepository.findByIsAdminAndEmail(role, email);
+	public User adminLogin(String role, String email) {
+		return loginRepository.findByRoleAndEmail(role, email);
 	}
 }

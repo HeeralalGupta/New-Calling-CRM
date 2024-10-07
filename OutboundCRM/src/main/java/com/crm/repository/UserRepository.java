@@ -9,6 +9,6 @@ import com.crm.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	
 //	@Query(value = "select * from users where is_admin=false", nativeQuery=true)
-	public List<User> findByIsAdmin(boolean checkUser);
+	public List<User> findByRole(String checkUser);
 	
 }

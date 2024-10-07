@@ -42,8 +42,8 @@ public class InboundAddReportService {
 		return inboundRepo.countByUserId(id);
 	}
 	
-	public Long countCallConnected(Long id, String connectionType) {
-		return inboundRepo.countByUserIdAndConnectionType(id, connectionType);
+	public Long countCallConnected(Long id, String connectionType, LocalDate date) {
+		return inboundRepo.countByUserIdAndConnectionTypeAndDateAndAssignTime(id, connectionType, date);
 	}
 	
 	public List<InboundReport> findReportByUserIdAndDateBetween(Long id, LocalDate fromDate, LocalDate toDate){

@@ -24,8 +24,9 @@ public interface InboundAddReportRepository extends JpaRepository<InboundReport,
 	
 	public Long countByUserId(Long userId);
 	
-	// counting connected data
-	Long countByUserIdAndConnectionType(Long userId, String connectionType);
+	// counting connected data on daily basis
+	@Query(value = "SELECT COUNT(*) FROM \"inbound-report\" WHERE user_id = :userId AND connection_type = :connectionType AND date = :date", nativeQuery = true)
+	Long countByUserIdAndConnectionTypeAndDateAndAssignTime(Long userId, String connectionType, LocalDate date);
 	
 	@Query(value = "SELECT * FROM \"inbound-report\" r WHERE r.\"user_id\" = :userId AND r.\"date\" BETWEEN :fromDate AND :toDate", nativeQuery = true)
 	public List<InboundReport> findByUserIdAndDateBetween(@Param("userId") Long userId, @Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate);
@@ -33,7 +34,7 @@ public interface InboundAddReportRepository extends JpaRepository<InboundReport,
 	@Query(value = "SELECT COUNT(*) FROM \"inbound-report\" WHERE user_id = ?1 AND assign_time = ?2", nativeQuery = true)
 	public int countByUserIdAndAssignTime(Long userId, LocalTime time);
 	
-	// counting connected data with specific time
+	// counting connected data with specific time for updating task table
 	int countByUserIdAndConnectionTypeAndAssignTime(Long userId, String connectionType, LocalTime time);
 	
 }

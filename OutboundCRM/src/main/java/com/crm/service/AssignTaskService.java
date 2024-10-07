@@ -41,7 +41,6 @@ public class AssignTaskService {
 		try {
 		    // Fetch the task by userId and max time
 		    task = assignTaskRepo.findFirstByUserIdOrderByTimeDesc(userId);
-
 		    if (task != null) {
 		    	// Convert byte array to CSV string
 			    String csvData = new String(task.getFileContent(), StandardCharsets.UTF_8);

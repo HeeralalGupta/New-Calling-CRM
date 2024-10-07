@@ -24,6 +24,7 @@ public class AssignTask {
 	private String assignId;
 	private Long userId;
 	private String dataCategory;
+	private Long pinCode;
 	private LocalDate date;
 	private LocalTime time;
 	private Long minSerialNumber;
@@ -58,6 +59,7 @@ public class AssignTask {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
 	public Long getMinSerialNumber() {
 		return minSerialNumber;
 	}
@@ -114,7 +116,12 @@ public class AssignTask {
 		this.fileContent = fileContent;
 	}
 	
-	
+	public Long getPinCode() {
+		return pinCode;
+	}
+	public void setPinCode(Long pinCode) {
+		this.pinCode = pinCode;
+	}
 	public int getTotalCalls() {
 		return totalCalls;
 	}
@@ -131,13 +138,14 @@ public class AssignTask {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public AssignTask(Long id, String assignId, Long userId, String dataCategory, LocalDate date, LocalTime time,
+	public AssignTask(Long id, String assignId, Long userId, Long pinCode, String dataCategory, LocalDate date, LocalTime time,
 			Long minSerialNumber, Long maxSerialNumber, String callingAreaName, String fileName, Long fileSize,
 			byte[] fileContent) {
 		super();
 		this.id = id;
 		this.assignId = assignId;
 		this.userId = userId;
+		this.pinCode = pinCode;
 		this.dataCategory = dataCategory;
 		this.date = date;
 		this.time = time;

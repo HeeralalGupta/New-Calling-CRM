@@ -41,7 +41,7 @@
 					<h3 class="page-title">
 						<span class="page-title-icon bg-gradient-primary text-white mr-2">
 							<i class="mdi mdi-format-list-bulleted-type"></i>
-						</span> Assigned Task
+						</span>Task Summary
 					</h3>
 					<nav aria-label="breadcrumb">
 						<ul class="breadcrumb">

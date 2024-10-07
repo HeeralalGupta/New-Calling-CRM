@@ -1,5 +1,6 @@
 package com.crm.controller;
 
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class UserController {
 	@PostMapping("/create-user")
 	public String createUser(@ModelAttribute User user, Model model, HttpSession session) {
 		try {
-			user.setAdmin(false);
+//			user.setAdmin(false);
 			// Fetching all user
 			User dbuser = userService.createUser(user);
 			List<User> allUser = userService.findAllUser();
@@ -78,5 +79,31 @@ public class UserController {
 		}
 		return "redirect:/user-profile";
 	}
+	
+//	============================ Admin Operation ========================
+	@PostMapping("/edit-user")
+	public String editUser(@RequestParam("userId") Long userId, Model model) {
+		User user = userService.getUserById(userId);
+		User userdb = userService.getUserById(userId);
 
+	    // If user data is present, encode the profile image to base64
+	    if (userdb != null && userdb.getData() != null) {
+	        byte[] content = userdb.getData(); 
+	        String base64Image = Base64.getEncoder().encodeToString(content);
+	        userdb.setFileName(base64Image);  // Set the base64 image as fileName (should be clarified if this is appropriate)
+	    }
+
+	    // Add user details and title to the model
+	    model.addAttribute("userProfile", userdb);
+		model.addAttribute("user", user);
+		return "update-user";
+	}
+	
+	@PostMapping("/update-user-by-admin/{userId}")
+	public String updateUserByAdmin(@PathVariable("userId") Long userId, User user, HttpSession session) {
+		userService.upateUser(user, userId);
+		session.setAttribute("updateSuccess", session);
+		return "redirect:/add-user";
+	}
+	
 }

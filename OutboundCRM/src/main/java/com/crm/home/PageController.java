@@ -1,5 +1,7 @@
 package com.crm.home;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -99,10 +101,11 @@ public class PageController {
 	    // Adding Data Report to dashboard
 	    try {
 	    	AssignTask taskData = assignTask.getAssignedTask(userId);
-//	    	inboundService.countByUserIdAndAssignTime(userId, taskData.geta)
+	    	
 		    if(taskData != null) {
+		    	int totalCallsDone = inboundService.totalCalls(userId, taskData.getTime());
 		    	Long totalCallDone = inboundService.countReportById(userId);
-			    Long countCallConnected = inboundService.countCallConnected(userId, "connected");
+			    Long countCallConnected = inboundService.countCallConnected(userId, "connected", LocalDate.now());
 			    Long todayCalls = inboundService.countReportByIdAndDate(userId);
 			    
 			    model.addAttribute("totalDataAssigned", taskData.getMaxSerialNumber() - taskData.getMinSerialNumber());
@@ -111,7 +114,7 @@ public class PageController {
 			    model.addAttribute("totalCallDone", totalCallDone);
 			    model.addAttribute("connectedCalls", countCallConnected);
 			    model.addAttribute("todayCallsDone", todayCalls);
-			    model.addAttribute("outStandingData", (taskData.getMaxSerialNumber() - taskData.getMinSerialNumber())-todayCalls);
+			    model.addAttribute("outStandingData", (taskData.getMaxSerialNumber() - taskData.getMinSerialNumber())-totalCallsDone);
 		    }else {
 		    	model.addAttribute("totalDataAssigned", "0");
 			    model.addAttribute("dataType", "Not Assigned");
@@ -169,20 +172,34 @@ public class PageController {
 		if (session == null || session.getAttribute("userSession") == null) {
 			return "redirect:/error-page";
 		}
-		model.addAttribute("title", "Add Users");
-		List<User> allUser = userService.findAllUser();
-		model.addAttribute("users", allUser);
-		// Retrieve the user ID from the session and get the user details from the database
-	    Long userId;
-	    try {
-	        userId = Long.parseLong(session.getAttribute("userSession").toString());
-	    } catch (NumberFormatException e) {
-	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
-	    }
+		model.addAttribute("title", "Add Users"); // adding page title to model
+		
+		List<User> allUsers = userService.findAllUser(); 
+		List<User> list = new ArrayList<>();
 
-	    // Calling userProfile method form given below
-	    userProfile(model, session, userId);
-	    
+		for (User u : allUsers) {
+		    byte[] content = u.getData(); 
+		    if (content != null) {
+		        // If content is not null, encode to Base64 and set it as the file name
+		        String base64Image = Base64.getEncoder().encodeToString(content);
+		        u.setFileName(base64Image);
+		    } else {
+		        // If content is null, set fileName to null or handle it appropriately
+		        u.setFileName(null); 
+		    }
+		    list.add(u); // Add user to the list regardless of whether content is null or not
+		}
+		model.addAttribute("users", list); // Add the modified user list to the model
+		// Retrieve the user ID from the session and get the user details from the database
+//	    Long userId;
+//	    try {
+//	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+//	    } catch (NumberFormatException e) {
+//	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+//	    }
+//	    // Calling userProfile method form given below
+//	    userProfile(model, session, userId);
+//	    
 		return "add-user";
 	}
 
@@ -402,7 +419,7 @@ public class PageController {
 
 	    // Calling userProfile method form given below
 	    userProfile(model, session, userId);
-		
+	    
 		return "view-daily-report";
 	}
 
@@ -485,7 +502,7 @@ public class PageController {
 
 	    User userdb = userService.getUserById(userId);
 	    
-	    boolean userRole = userdb.isAdmin();
+	    String userRole = userdb.getRole();
 	   System.out.println(userRole);
 	    // If user data is present, encode the profile image to base64
 	    if (userdb != null && userdb.getData() != null) {
@@ -499,7 +516,7 @@ public class PageController {
 	    model.addAttribute("title", "Profile");
 
 	    // Return the profile view
-	    if(userRole==false) {
+	    if(userRole=="user") {
 	    	return "profile";
 	    }else {
 	    	return "admin-profile";
@@ -521,6 +538,6 @@ public class PageController {
 	    // Add user details and title to the model
 	    model.addAttribute("userProfile", userdb);
 	}
-
-
+	
+	
 }

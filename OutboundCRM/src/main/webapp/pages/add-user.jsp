@@ -5,6 +5,27 @@
 <html>
 <head>
 <%@ include file="common/head.jsp"%>
+<style>
+  .badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+  }
+  
+  .active-status {
+    background-color: green;
+  }
+  
+  .inactive-status {
+    background-color: red;
+  }
+  .updateBtn{
+  	border: none;
+  	background: transparent;
+  }
+</style>
+
 </head>
 <body>
 
@@ -22,7 +43,7 @@
 					<h3 class="page-title">
 						<span class="page-title-icon bg-gradient-primary text-white mr-2">
 							<i class="mdi mdi-account-multiple-plus"></i>
-						</span> Add User
+						</span>User
 					</h3>
 					<nav aria-label="breadcrumb">
 						<ul class="breadcrumb">
@@ -36,12 +57,12 @@
 				<!-- ===================== Page body starts ============================================ -->
 				<%
 				if (session.getAttribute("userSuccess") != null) {
-					out.print("<script>Swal.fire({ title: 'Tele caller Added!', text: 'Thank You!', icon: 'success'});</script>");
+					out.print("<script>Swal.fire({ title: 'User Added!', text: 'Thank You!', icon: 'success'});</script>");
 					session.removeAttribute("userSuccess");
 				}
-				if (session.getAttribute("deleteSuccess") != null) {
-					out.print("<script>Swal.fire({ title: 'Tele Caller Deleted!', text: 'Thank You!', icon: 'success'});</script>");
-					session.removeAttribute("deleteSuccess");
+				if (session.getAttribute("updateSuccess") != null) {
+					out.print("<script>Swal.fire({ title: 'User Updated!', text: 'Thank You!', icon: 'success'});</script>");
+					session.removeAttribute("updateSuccess");
 				}
 				%>
 				
@@ -77,12 +98,11 @@
 					<div class="col-12">
 						<div class="card">
 							<div class="card-body">
-								<h4 class="card-description text-info text-bold">Add a
-									Telecaller</h4>
+								<h4 class="card-description text-info text-bold">Add User</h4>
 
 								<form action="create-user" method="post" class="form-sample">
 									<div class="row">
-										<div class="col-md-4">
+										<div class="col-md-3">
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">Name<span
 													style="color: red;">*</span></label>
@@ -92,7 +112,18 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-3">
+											<div class="form-group row">
+												<label class="col-sm-3 col-form-label">Mobile No.<span
+													style="color: red;">*</span></label>
+												<div class="col-sm-9">
+													<input type="tel" name="mobile" class="form-control" maxlength="10"
+       													pattern="[0-9]{10}" inputmode="numeric" placeholder="Mobile Number" 
+       													title="Mobile number must be 10 digits" required />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">Email<span
 													style="color: red;">*</span></label>
@@ -102,9 +133,9 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-3">
 											<div class="form-group row">
-												<label class="col-sm-3 col-form-label">Create
+												<label class="col-sm-3 col-form-label">
 													Password<span style="color: red;">*</span>
 												</label>
 												<div class="col-sm-9">
@@ -113,14 +144,27 @@
 												</div>
 											</div>
 										</div>
-										<div class="row">
+										<div class="col-md-3">
+												<div class="form-group row">
+													<label class="col-sm-3 col-form-label">Role<span
+														style="color: red;">*</span></label>
+													<div class="col-sm-9">
+														<select class="form-control" name="role">
+															<option selected>Choose</option>
+															<option value="user">User</option>
+															<option value="admin">Team Leader</option>
+														</select>
+													</div>
+												</div>
+											</div>
+									</div>
+									<div class="row">
+											<input type="hidden" name="status" value="Active">
 											<div class="col-md-12">
 												<button type="submit"
-													class="btn btn-gradient-primary btn-fw" cursorshover="true">Create
-													User</button>
+													class="btn btn-gradient-primary btn-fw">Create</button>
 											</div>
 										</div>
-									</div>
 								</form>
 							</div>
 						</div>
@@ -134,7 +178,7 @@
 								<!-- Search input -->
 								<div class="row align-items-center">
 									<div class="col-md-4">
-										<h4 class="card-title">Telecaller List</h4>
+										<h4 class="card-title">User List</h4>
 									</div>
 									<div class="col-md-4 d-flex align-items-center">
 										<div class="number-of-rows mr-2">
@@ -172,7 +216,9 @@
 											<tr>
 												<th>S.No.</th>
 												<th>Name</th>
+												<th>Mobile No.</th>
 												<th>Email</th>
+												<th>Status</th>
 												<th>Action</th>
 											</tr>
 										</thead>
@@ -180,9 +226,27 @@
 											<c:forEach var="user" items="${users}" varStatus="sno">
 												<tr>
 													<td>${sno.count}</td>
-													<td>${user.name}</td>
+													<td><img src="data:${user.fileType};Base64,${user.fileName}" alt="image"
+                  											onerror="this.onerror=null;this.src='assets/images/faces/user.png';" style="margin-right:5px">${user.name}
+                  									</td>
+													<td>${user.mobile}</td>
 													<td>${user.email}</td>
-													<td><a href="javascript:void(0);" onclick="deleteUser('${user.id}')" <%-- onclick="openOtpDialog('${user.id}', '${user.email}')" --%>><img src="assets/images/delete-icon.png"></a></td>
+													<td>
+														<c:choose>
+													        <c:when test="${user.status == 'Active'}">
+													            <span class="badge active-status">Active</span>
+													        </c:when>
+													        <c:otherwise>
+													            <span class="badge inactive-status">Inactive</span>
+													        </c:otherwise>
+													    </c:choose>
+													</td>
+													<td>
+														<form action="edit-user" method="post">
+																<input type="hidden" name="userId" value="${user.id}">
+																<button type="submit" class="updateBtn"><img src="assets/images/update-icon.png"></button>
+														</form>
+													</td>
 												</tr>
 											</c:forEach>
 										</tbody>
@@ -222,24 +286,6 @@
 	<%@ include file="common/scripts.jsp"%>
 	<!-- End custom js for this page -->
 	<script>
-		function deleteUser(userId){
-			Swal.fire({
-				  title: 'Are you sure?',
-				  text: "You won't be able to revert this!",
-				  icon: 'warning',
-				  showCancelButton: true,
-				  confirmButtonColor: '#3085d6',
-				  cancelButtonColor: '#d33',
-				  confirmButtonText: 'Delete'
-				}).then((result) => {
-				  if (result.isConfirmed) {
-				   window.location="/deleteUser/"+userId;
-				  }
-				  else{
-					  swal("Your job is safe !!!")
-				  }
-				})
-		}
 		/* Searching */
 		$(document).ready(function(){
 		  $("#search").on("keyup", function() {

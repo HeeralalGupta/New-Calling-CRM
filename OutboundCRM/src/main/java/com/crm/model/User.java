@@ -1,5 +1,7 @@
 package com.crm.model;
 
+import java.util.Arrays;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +19,10 @@ public class User {
 	
 	private String name;
 	private String email;
+	private Long mobile;
+	private String status;
 	private String password;
-	private boolean isAdmin;
+	private String role;
 	
 	private String fileName;
 	private String fileType;
@@ -69,19 +73,38 @@ public class User {
 		this.password = password;
 	}
 	
-	public boolean isAdmin() {
-		return isAdmin;
+	public String getRole() {
+		return role;
 	}
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
+	public void setRole(String role) {
+		this.role = role;
 	}
-	public User(Long id, String name, String email, String password, boolean isAdmin) {
+	public Long getMobile() {
+		return mobile;
+	}
+	public void setMobile(Long mobile) {
+		this.mobile = mobile;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public User(Long id, String name, String email, Long mobile, String status, String password, String role,
+			String fileName, String fileType, byte[] data) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
+		this.mobile = mobile;
+		this.status = status;
 		this.password = password;
-		this.isAdmin = isAdmin;
+		this.role = role;
+		this.fileName = fileName;
+		this.fileType = fileType;
+		this.data = data;
 	}
 	public User() {
 		super();
@@ -89,9 +112,11 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", isAdmin="
-				+ isAdmin + "]";
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", mobile=" + mobile + ", status=" + status
+				+ ", password=" + password + ", role=" + role + ", fileName=" + fileName + ", fileType=" + fileType
+				+ ", data=" + Arrays.toString(data) + "]";
 	}
+	
 	
 	
 	
