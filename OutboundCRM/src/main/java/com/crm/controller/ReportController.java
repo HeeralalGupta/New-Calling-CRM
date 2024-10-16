@@ -1,5 +1,6 @@
 package com.crm.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,16 @@ public class ReportController {
 	// Saving report
 	@PostMapping("/save-report")
 	public String saveReport(@ModelAttribute Report report, Model model, HttpSession session) {
-		
+		// Retrieve the user ID from the session and get the user details from the database
+	    Long userId;
+	    try {
+	        userId = Long.parseLong(session.getAttribute("userSession").toString());
+	    } catch (NumberFormatException e) {
+	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
+	    }
 		// Saving report data
+	    report.setUserId(userId);
+		report.setDate(LocalDate.now());
 		Report reportData = reportService.saveReportData(report);
 		
 		if(reportData!=null) {
@@ -38,7 +47,7 @@ public class ReportController {
 		model.addAttribute("ruralReports", ruralList);
 		model.addAttribute("urbanReports", urbanList);
 		
-		return "view-report"; // This will hit only page directly
+		return "redirect:/view"; // This will hit only link  directly
 	}
 	
 	// Updating rural data

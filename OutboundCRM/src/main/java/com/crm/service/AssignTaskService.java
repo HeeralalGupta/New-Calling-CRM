@@ -115,4 +115,9 @@ public class AssignTaskService {
 	    return assignTaskRepo.save(task);
 	}
 	
+	// find all task with report 
+	public List<AssignTask> findAllReportByDate(LocalDate fromDate, LocalDate toDate) {
+		return assignTaskRepo.findByDateBetween(fromDate, toDate);
+	}
+	
 }

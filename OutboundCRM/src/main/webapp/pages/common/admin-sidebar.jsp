@@ -59,7 +59,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="upload-data">
                 <span class="menu-title">Database</span>
                 <i class="mdi mdi-database-plus menu-icon"></i>
               </a>

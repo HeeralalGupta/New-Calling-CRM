@@ -41,6 +41,7 @@
 									Disposition</h4>
 
 								<form action="save-report" method="post" class="form-sample">
+									<input type="hidden" name="userId" value="${userId}">
 									<div class="row">
 										<div class="col-md-4">
 									            <div class="form-group row">

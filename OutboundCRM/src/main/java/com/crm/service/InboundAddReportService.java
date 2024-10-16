@@ -57,4 +57,13 @@ public class InboundAddReportService {
 	public int totalCalls(Long userId, LocalTime time) {
 		return inboundRepo.countByUserIdAndAssignTime(userId, time);
 	}
+
+	public List<InboundReport> finAllReport() {
+		return inboundRepo.findAll();
+	}
+	
+	public List<InboundReport> findAllReportByDateRange(LocalDate fromDate, LocalDate toDate) {
+		List<InboundReport> list = inboundRepo.findByDateBetween(fromDate, toDate);
+		return list;
+	}
 }

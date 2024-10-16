@@ -57,127 +57,47 @@
 					}
 				%>
 				<div class="row">
-	              <div class="col-12 grid-margin">
-	                <div class="card">
+					<div class="col-12 grid-margin">
+						<div class="card">
 							<div class="card-body">
-								
 								<!-- Search input -->
-								<div class="row">
-									<div class="col-md-9">
-										<h4 class="card-title">Rural Data</h4>
+								<div class="row align-items-center">
+									<div class="col-md-4">
+										<h4 class="card-title">Called Number</h4>
 									</div>
-									<div class="col-md-3 mb-3">
+									<div class="col-md-4 d-flex align-items-center">
+										<div class="number-of-rows mr-2">
+											<p>Select No. of Rows:</p>
+										</div>
+										<div class="form-group">
+											<!-- Show Numbers Of Rows -->
+											<select class="form-control" name="state" id="maxRows">
+												<option value="5000">Show ALL Rows</option>
+												<option value="5">5</option>
+												<option value="10">10</option>
+												<option value="15">15</option>
+												<option value="20">20</option>
+												<option value="50">50</option>
+												<option value="70">70</option>
+												<option value="100">100</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-4 mb-3">
 										<div class="input-group">
 											<input type="text" class="form-control"
-												placeholder="Type to search"
-												id="r-search"
-												aria-label="Recipient's username"
-												aria-describedby="basic-addon2">
+												placeholder="Type to search" id="u-search"
+												onkeyup="myFunction()" aria-describedby="basic-addon2">
 											<div class="input-group-append">
-												<button class="btn btn-sm btn-gradient-primary" type="button"
-													cursorshover="true">Search</button>
+												<button class="btn btn-sm btn-gradient-primary"
+													type="button" cursorshover="true">Search</button>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="table-responsive">
-									<table class="table" id="rural-info">
-										<thead>
-											<tr class="text-info">
-												<th>S.No.</th>
-												<th>Call Connected</th>
-												<th>Call Not Connected</th>
-												<th>Name</th>
-												<th>Email</th>
-												<th>Mobile</th>
-												<th>Alternate Mobile</th>
-												<th>Profession</th>
-												<th>Gender</th>
-												<th>Age</th>
-												<th>District</th>
-												<th>Block</th>
-												<th>Panchayat</th>
-												<th>Lok Sabha</th>
-												<th>Vidhan Sabha</th>
-												<th>Sub Divisional</th>
-												<th>Calling For</th>
-												<th>Note</th>
-												<th colspan="2" class="text-center">Action</th>
-											</tr>
-										</thead>
-										<tbody id="ruralTable">
-											<c:forEach var="ruralReport" items="${ruralReports}"
-												varStatus="sno">
-												<tr>
-													<td>${sno.count}</td>
-													<td>${ruralReport.callConnected}</td>
-													<td>${ruralReport.callNotConnected}</td>
-													<td>${ruralReport.name}</td>
-													<td>${ruralReport.email}</td>
-													<td>${ruralReport.mobile}</td>
-													<td>${ruralReport.alternateMobile}</td>
-													<td>${ruralReport.profession}</td>
-													<td>${ruralReport.gender}</td>
-													<td>${ruralReport.age}</td>
-													<td>${ruralReport.ruralDistrict}</td>
-													<td>${ruralReport.ruralBlock}</td>
-													<td>${ruralReport.ruralPanchayat}</td>
-													<td>${ruralReport.lokSabha}</td>
-													<td>${ruralReport.vidhanSabha}</td>
-													<td>${ruralReport.subDivision}</td>
-													<td>${ruralReport.callingFor}</td>
-													<td>${ruralReport.note}</td>
 
-													<td class="text-right"><a href="javascript:void(0);"
-														onclick="deleteReport('${ruralReport.id}')"
-														class="btn btn-danger">Delete</a></td>
-													<td class="text-left">
-														<form method="post" action="ruralEdit">
-															<input type="hidden" name="ruralReportId"
-																value="${ruralReport.id}">
-															<button type="submit" class="btn btn-primary">Update</button>
-														</form>
-													</td>
-												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
-								</div>
-								<!-- Start Pagination Control-->
-								<div id="pagination"></div>
-								
-							</div>
-						</div>
-	              </div>
-	            </div>
-           		
-           		<!-- Urban Table -->
-           		<div class="row">
-	              <div class="col-12 grid-margin">
-	                <div class="card">
-							<div class="card-body">
-								<!-- Search input -->
-								<div class="row">
-									<div class="col-md-9">
-										<h4 class="card-title">Urban Data</h4>
-									</div>
-									<div class="col-md-3 mb-3">
-										<div class="input-group">
-											<input type="text" 
-												class="form-control"
-												placeholder="Type to search"
-												id="u-search"
-												onkeyup="myFunction()"
-												aria-describedby="basic-addon2">
-											<div class="input-group-append">
-												<button class="btn btn-sm btn-gradient-primary" type="button"
-													cursorshover="true">Search</button>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div class="table-responsive">
-									<table class="table" >
+									<table class="table table-striped table-class" id="table-id">
 										<thead>
 											<tr class="text-info">
 												<th>S.No.</th>
@@ -191,60 +111,74 @@
 												<th>Gender</th>
 												<th>Age</th>
 												<th>District</th>
-												<th>Police Station</th>
-												<th>Municipality</th>
 												<th>Lok Sabha</th>
 												<th>Vidhan Sabha</th>
 												<th>Sub Divisional</th>
 												<th>Calling For</th>
+												<th>Date</th>
 												<th>Note</th>
-												<th colspan="2" class="text-center">Action</th>
+												<!-- <th colspan="2" class="text-center">Action</th> -->
 											</tr>
 										</thead>
 										<tbody id="urbanTable">
-											<c:forEach var="urbanReport" items="${urbanReports}"
+											<c:forEach var="callerReport" items="${reportData}"
 												varStatus="sno">
 												<tr>
 													<td>${sno.count}</td>
-													<td>${urbanReport.callConnected}</td>
-													<td>${urbanReport.callNotConnected}</td>
-													<td>${urbanReport.name}</td>
-													<td>${urbanReport.email}</td>
-													<td>${urbanReport.mobile}</td>
-													<td>${urbanReport.alternateMobile}</td>
-													<td>${urbanReport.profession}</td>
-													<td>${urbanReport.gender}</td>
-													<td>${urbanReport.age}</td>
-													<td>${urbanReport.urbanDistrict}</td>
-													<td>${urbanReport.urbanPoliceStation}</td>
-													<td>${urbanReport.urbanMunicipality}</td>
-													<td>${urbanReport.lokSabha}</td>
-													<td>${urbanReport.vidhanSabha}</td>
-													<td>${urbanReport.subDivision}</td>
-													<td>${urbanReport.callingFor}</td>
-													<td>${urbanReport.note}</td>
+													<td><div class="connected">${callerReport.callConnected}</div></td>
+													<td><div class="not-connected">${callerReport.callNotConnected}</div></td>
+													<td>${callerReport.name}</td>
+													<td>${callerReport.email}</td>
+													<td>${callerReport.mobile}</td>
+													<td>${callerReport.alternateMobile}</td>
+													<td>${callerReport.profession}</td>
+													<td>${callerReport.gender}</td>
+													<td>${callerReport.age}</td>
+													<td>${callerReport.urbanDistrict}</td>
+													<td>${callerReport.lokSabha}</td>
+													<td>${callerReport.vidhanSabha}</td>
+													<td>${callerReport.subDivision}</td>
+													<td>${callerReport.callingFor}</td>
+													<td>${callerReport.date}</td>
+													<td>${callerReport.note}</td>
 
-													<td class="text-right"><a href="javascript:void(0);"
-														onclick="deleteReport('${urbanReport.id}')"
+													<%-- <td class="text-right"><a href="javascript:void(0);"
+														onclick="deleteReport('${callerReport.id}')"
 														class="btn btn-danger">Delete</a></td>
 													<td class="text-left">
 														<form method="post" action="urbanEdit">
-															<input type="hidden" name="urbanReportId"
-																value="${urbanReport.id}">
+															<input type="hidden" name="callerReportId"
+																value="${callerReport.id}">
 															<button type="submit" class="btn btn-primary">Update</button>
 														</form>
-													</td>
+													</td> --%>
 												</tr>
 											</c:forEach>
 										</tbody>
 									</table>
+									<!--Start Pagination -->
+									<div class='pagination-container my-3'>
+										<nav>
+											<ul class="pagination">
+
+												<li data-page="prev"><span class="prev"> Prev <span
+														class="sr-only current">(current)</span></span></li>
+												<!--	Here the JS Function Will Add the Rows -->
+												<li data-page="next" id="prev"><span class="next"> Next <span
+														class="sr-only current">(current)</span></span></li>
+											</ul>
+										</nav>
+									</div>
+									<!--End Pagination -->
 								</div>
-								
+
 							</div>
 						</div>
-	              </div>
-	            </div>
-				
+					</div>
+				</div>
+           		
+           		<!-- Urban Table -->
+           		
 				<!-- ===================== Page body ends ============================================== -->
 
 			</div>

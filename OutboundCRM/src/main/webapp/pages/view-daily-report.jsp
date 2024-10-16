@@ -41,7 +41,7 @@
 								<h4 class="card-description text-info text-bold">By Users</h4>
 								<form id="reportForm">
 									<div class="row">
-										<div class="col-md-4">
+										<div class="col-md-3">
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">Users<span style="color: red;">*</span></label>
 												<div class="col-sm-9">
@@ -55,7 +55,7 @@
 											</div>
 										</div>
 										
-										<div class="col-md-4">
+										<div class="col-md-3">
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">From<span style="color: red;">*</span></label>
 												<div class="col-sm-9">
@@ -65,7 +65,7 @@
 											</div>
 										</div>
 
-										<div class="col-md-4">
+										<div class="col-md-3">
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">To<span style="color: red;">*</span></label>
 												<div class="col-sm-9">
@@ -73,18 +73,16 @@
 														name="toDate" class="form-control" required />
 												</div>
 											</div>
-										</div>								
+										</div>	
+										<div class="row mb-3">
+											<div class="col-md-12">
+												<button type="submit" class="btn btn-sm btn-gradient-primary btn-fw ml-4">Generate</button>
+											</div>
+										</div>							
 									</div>
-									
-									<div class="row mb-4">
-										<div class="col-md-12">
-											<button type="submit" class="btn btn-gradient-primary btn-fw"
-												cursorshover="true">Generate</button>
-										</div>
-									</div>
+	
 								</form>
-								
-								
+							
 							</div>
 						</div>
 					</div>
@@ -129,16 +127,26 @@
 														type="button" cursorshover="true">Search</button>
 												</div>
 											</div>
-										</div>
+										</div>					
 									</div>
+									<!-- Download Button -->
+					                    <form id="downloadForm" method="GET" action="/generateReport/download">
+										    <input type="hidden" name="userId" id="hiddenUserId" />
+										    <input type="hidden" name="fromDate" id="hiddenFromDate" />
+										    <input type="hidden" name="toDate" id="hiddenToDate" />
+										    <button type="submit" id="downloadBtn" class="btn btn-sm btn-gradient-success"><img src="assets/images/excel.png" width="20px" style="margin-right: 5px;"/>Excel</button>
+										</form>
+
 									<div class="table-responsive">
-										<table class="table table-class mt-4" id="reportTable">
+										<table class="table table-class mt-1" id="reportTable">
 											<thead>
 												<tr>
 													<th>S.No.</th>
+													<th>Task Id</th>
+													<th>User Name</th>
 													<th>Assign Date</th>
 													<th>Assign Time</th>
-													<th>Total Data Assigned</th>
+													<th>Data Alloted</th>
 													<th>Data Type</th>
 													<th>Calling Area</th>
 													<th>Total Call</th>
@@ -187,7 +195,7 @@
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">From<span style="color: red;">*</span></label>
 												<div class="col-sm-9">
-													<input type="date" id="fromDate" name="fromDate"
+													<input type="date" id="startDate" name="startDate"
 														class="form-control" required />
 												</div>
 											</div>
@@ -197,19 +205,19 @@
 											<div class="form-group row">
 												<label class="col-sm-3 col-form-label">To<span style="color: red;">*</span></label>
 												<div class="col-sm-9">
-													<input type="date" id="date"
-														name="toDate" class="form-control" required />
+													<input type="date" id="endDate"
+														name="endDate" class="form-control" required />
 												</div>
 											</div>
-										</div>								
+										</div>	
+										<div class="row mb-4">
+											<div class="col-md-12">
+												<button type="submit" class="btn btn-sm btn-gradient-primary btn-fw ml-4"
+													cursorshover="true">Generate</button>
+											</div>
+										</div>							
 									</div>
-									
-									<div class="row mb-4">
-										<div class="col-md-12">
-											<button type="submit" class="btn btn-gradient-primary btn-fw"
-												cursorshover="true">Generate</button>
-										</div>
-									</div>
+	
 								</form>
 								
 								
@@ -259,19 +267,26 @@
 											</div>
 										</div>
 									</div>
+									 <!-- Download Button -->
+				                      <form id="downloadAllForm" method="GET" action="/generateAllReport/download">
+										    <input type="hidden" name="fromDate" id="hiddenAllFromDate" />
+										    <input type="hidden" name="toDate" id="hiddenAllToDate" />
+										    <button type="submit" id="downloadAllBtn" class="btn btn-sm btn-gradient-success"><img src="assets/images/excel.png" width="20px" style="margin-right: 5px;"/>Excel</button>
+										</form>
 									<div class="table-responsive">
-										<table class="table table-class mt-4" id="reportTableByDateRange">
+										<table class="table mt-1" id="reportTableByDateRange">
 											<thead>
 												<tr>
 													<th>S.No.</th>
+													<th>Task Id</th>
+													<th>User Name</th>
 													<th>Assign Date</th>
 													<th>Assign Time</th>
-													<th>Total Data Assigned</th>
+													<th>Data Alloted</th>
 													<th>Data Type</th>
 													<th>Calling Area</th>
 													<th>Total Call</th>
 													<th>Call Connected</th>
-													
 												</tr>
 											</thead>
 											<tbody>
@@ -299,40 +314,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- ================= Report Generated by date range only End ==================== -->
-				<%-- <div class="row mt-4">
-					<div class="col-12">
-						<div class="card">
-							<div class="card-body">
-								<h4 class="card-description text-info text-bold">List of Telecaller</h4>
-								<div class="table-responsive">
-									<table class="table">
-										<thead>
-											<tr>
-												<th>S.No.</th>
-												<th>Name</th>
-												<th>Email</th>
-												<th>Action</th>
-											</tr>
-										</thead>
-										<tbody>
-											<c:forEach var="user" items="${users}" varStatus="sno">
-												<tr>
-													<td>${sno.count}</td>
-													<td>${user.name}</td>
-													<td>${user.email}</td>
-													<td><a href="report-details?id=${user.id}" ><button class="btn btn-success">View Daily Report</button></a></td>
-												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>					
-				 --%>
-				<!-- ===================== Page body ends ============================================== -->
+				
 
 			</div>
 			<!-- content-wrapper ends -->
@@ -375,11 +357,13 @@
 		 <script>
 		 /* Generating data by user id and date range only */
 		 $(document).ready(function() {
-			    // Hide the reportData div when the Telecaller dropdown value changes
+			    // Hide the reportData div and disable download button initially
 			    $("select[name='userId']").change(function() {
 			        $("#reportData").hide();
+			        $("#reportDataByDateRange").hide();
+			        $("#downloadBtn").attr("disabled", true); // Disable download button
 			    });
-
+			
 			    // Submit form and show the report data
 			    $("#reportForm").submit(function(event) {
 			        event.preventDefault(); // Prevent default form submission
@@ -395,45 +379,84 @@
 			                // Check if data is returned
 			                if (data.length > 0) {
 			                    $.each(data, function(index, report) {
-			                    	// Ensure report values exist and provide a fallback if necessary
+			                        // Ensure report values exist and provide a fallback if necessary
 			                        var minSerialNumber = report.minSerialNumber || 0;
 			                        var maxSerialNumber = report.maxSerialNumber || 0;
 			                        
 			                        var row = "<tr>" +
 			                                  "<td>" + (index + 1) + "</td>" +
-			                                  "<td>" + report.date + "</td>" +
-			                                  "<td>" + report.time + "</td>" +
-			                                  "<td>" + (maxSerialNumber-minSerialNumber) + "</td>" +	
-			                                  "<td>" + report.dataCategory + "</td>" +
-			                                  "<td>" + report.callingAreaName + "</td>" +
-			                                  "<td>" + report.totalCalls + "</td>" +
-			                                  "<td>" + report.connectedCalls + "</td>" +
-
+			                                  "<td>" + (report.assignId || '-') + "</td>" +
+			                                  "<td>" + (report.userName || '-') + "</td>" +
+			                                  "<td>" + (report.date || '-') + "</td>" +
+			                                  "<td>" + (report.time || '-') + "</td>" +
+			                                  "<td>" + (maxSerialNumber - minSerialNumber) + "</td>" +
+			                                  "<td>" + (report.dataCategory || '-') + "</td>" +
+			                                  "<td>" + (report.callingAreaName || '-') + "</td>" +
+			                                  "<td>" + (report.totalCalls || 0) + "</td>" +
+			                                  "<td>" + (report.connectedCalls || 0) + "</td>" +
 			                                  "</tr>";
 			                        $("#reportTable tbody").append(row);
 			                    });
-
+			
 			                    // Show the report data div
 			                    $("#reportData").show();
+			
+			                    // Enable download button
+			                    $("#downloadBtn").attr("disabled", false);
+									
 			                } else {
 			                    alert("No data found for the selected criteria.");
+			                    $("#downloadBtn").attr("disabled", true); // Disable download button
 			                }
 			            },
 			            error: function(error) {
 			                console.log("Error:", error);
+			                alert("There was an error retrieving the data.");
 			            }
 			        });
 			    });
+			    
+			 // Download button click event
+			    $("#downloadBtn").click(function() {
+			    	event.preventDefault(); // Prevent the default action
+			        // Get the values from the form
+			        const userId = $("select[name='userId']").val();
+			        const fromDate = $("input[name='fromDate']").val();
+			        const toDate = $("input[name='toDate']").val();
+					
+			        // Log the values to the console
+			        console.log("User ID:", userId);
+			        console.log("From Date:", fromDate);
+			        console.log("To Date:", toDate);
+
+			        // Check if all required fields are filled
+				    if (userId && fromDate && toDate) {
+				    	// Set the hidden fields in the form
+				        $("#hiddenUserId").val(userId);
+				        $("#hiddenFromDate").val(fromDate);
+				        $("#hiddenToDate").val(toDate);
+
+				        // Submit the form
+				        $("#downloadForm").submit();
+				    } else {
+				        alert("Please select a user and specify the date range before downloading.");
+				   
+				    }
+			    });
+			 
 			});
+
 		 /* Generating data by user id and date range only end */
 		 
 		 /* Generating data by date range only */
 		 $(document).ready(function() {
-			    // Hide the reportData div when the Telecaller dropdown value changes
-			    $("select[name='fromDate']").change(function() {
+			    // Hide the reportData div and disable download button initially
+			    $("input[name='startDate']").change(function() {
 			        $("#reportDataByDateRange").hide();
+			        $("#reportData").hide();
+			        $("#downloadAllBtn").attr("disabled", true); // Disable download button
 			    });
-
+			
 			    // Submit form and show the report data
 			    $("#reportFormByDateRange").submit(function(event) {
 			        event.preventDefault(); // Prevent default form submission
@@ -449,37 +472,85 @@
 			                // Check if data is returned
 			                if (data.length > 0) {
 			                    $.each(data, function(index, report) {
-			                    	// Ensure report values exist and provide a fallback if necessary
+			                        // Ensure report values exist and provide a fallback if necessary
 			                        var minSerialNumber = report.minSerialNumber || 0;
 			                        var maxSerialNumber = report.maxSerialNumber || 0;
 			                        
 			                        var row = "<tr>" +
 			                                  "<td>" + (index + 1) + "</td>" +
-			                                  "<td>" + report.date + "</td>" +
-			                                  "<td>" + report.time + "</td>" +
-			                                  "<td>" + (maxSerialNumber-minSerialNumber) + "</td>" +	
-			                                  "<td>" + report.dataCategory + "</td>" +
-			                                  "<td>" + report.callingAreaName + "</td>" +
-			                                  "<td>" + report.totalCalls + "</td>" +
-			                                  "<td>" + report.connectedCalls + "</td>" +
-
+			                                  "<td>" + (report.assignId || '-') + "</td>" +
+			                                  "<td>" + (report.userName || '-') + "</td>" +
+			                                  "<td>" + (report.date || '-') + "</td>" +
+			                                  "<td>" + (report.time || '-') + "</td>" +
+			                                  "<td>" + (maxSerialNumber - minSerialNumber) + "</td>" +
+			                                  "<td>" + (report.dataCategory || '-') + "</td>" +
+			                                  "<td>" + (report.callingAreaName || '-') + "</td>" +
+			                                  "<td>" + (report.totalCalls || 0) + "</td>" +
+			                                  "<td>" + (report.connectedCalls || 0) + "</td>" +
 			                                  "</tr>";
 			                        $("#reportTableByDateRange tbody").append(row);
 			                    });
-
+			
 			                    // Show the report data div
 			                    $("#reportDataByDateRange").show();
+			
+			                    // Enable download button
+			                    $("#downloadAllBtn").attr("disabled", false);
+									
 			                } else {
 			                    alert("No data found for the selected criteria.");
+			                    $("#downloadAllBtn").attr("disabled", true); // Disable download button
 			                }
 			            },
 			            error: function(error) {
 			                console.log("Error:", error);
+			                alert("There was an error retrieving the data.");
 			            }
 			        });
 			    });
-			});
-	    </script>
+			    
+			 // Download button click event
+			    $("#downloadAllBtn").click(function() {
+			    	event.preventDefault(); // Prevent the default action
+			        // Get the values from the form
+			        const fromDate = $("input[name='startDate']").val();
+			        const toDate = $("input[name='endDate']").val();
+					
+			        // Log the values to the console
+			        console.log("From Date:", fromDate);
+			        console.log("To Date:", toDate);
+
+			        // Check if all required fields are filled
+				    if (fromDate && toDate) {
+				    	// Set the hidden fields in the form
+				        $("#hiddenAllFromDate").val(fromDate);
+				        $("#hiddenAllToDate").val(toDate);
+
+				        // Submit the form
+				        $("#downloadAllForm").submit();
+				    } else {
+				        alert("Please select a user and specify the date range before downloading.");
+				   
+				    }
+			    });
+			    
+		 });
+		
+	   </script>
+	    <script>
+		    // Select all input elements of type date
+		    const dateInputs = document.querySelectorAll('input[type="date"]');
+		
+		    // Add event listener to open the date picker on focus or click
+		    dateInputs.forEach(function(input) {
+		        input.addEventListener('focus', function() {
+		            input.showPicker(); // Trigger the native date picker
+		        });
+		        input.addEventListener('click', function() {
+		            input.showPicker(); // Trigger the native date picker on click
+		        });
+		    });
+		</script>
 		
 </body>
 </html>

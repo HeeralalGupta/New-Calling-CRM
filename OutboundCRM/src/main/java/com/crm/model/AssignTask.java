@@ -23,6 +23,7 @@ public class AssignTask {
 	private Long id;
 	private String assignId;
 	private Long userId;
+	private String userName;
 	private String dataCategory;
 	private Long pinCode;
 	private LocalDate date;
@@ -47,6 +48,7 @@ public class AssignTask {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
 	public String getAssignId() {
 		return assignId;
 	}
@@ -60,6 +62,12 @@ public class AssignTask {
 		this.userId = userId;
 	}
 	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 	public Long getMinSerialNumber() {
 		return minSerialNumber;
 	}
@@ -138,31 +146,35 @@ public class AssignTask {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public AssignTask(Long id, String assignId, Long userId, Long pinCode, String dataCategory, LocalDate date, LocalTime time,
-			Long minSerialNumber, Long maxSerialNumber, String callingAreaName, String fileName, Long fileSize,
-			byte[] fileContent) {
+	public AssignTask(Long id, String assignId, Long userId, String userName, String dataCategory, Long pinCode,
+			LocalDate date, LocalTime time, Long minSerialNumber, Long maxSerialNumber, Integer totalCalls,
+			Integer connectedCalls, String callingAreaName, String fileName, Long fileSize, byte[] fileContent) {
 		super();
 		this.id = id;
 		this.assignId = assignId;
 		this.userId = userId;
-		this.pinCode = pinCode;
+		this.userName = userName;
 		this.dataCategory = dataCategory;
+		this.pinCode = pinCode;
 		this.date = date;
 		this.time = time;
 		this.minSerialNumber = minSerialNumber;
 		this.maxSerialNumber = maxSerialNumber;
+		this.totalCalls = totalCalls;
+		this.connectedCalls = connectedCalls;
 		this.callingAreaName = callingAreaName;
 		this.fileName = fileName;
 		this.fileSize = fileSize;
 		this.fileContent = fileContent;
-
 	}
 	@Override
 	public String toString() {
-		return "AssignTask [id=" + id + ", assignId=" + assignId + ", userId=" + userId + ", dataCategory="
-				+ dataCategory + ", date=" + date + ", time=" + time + ", minSerialNumber=" + minSerialNumber
-				+ ", maxSerialNumber=" + maxSerialNumber + ", callingAreaName=" + callingAreaName + ", fileName="
-				+ fileName + ", fileSize=" + fileSize + ", fileContent=" + Arrays.toString(fileContent) + "]";
+		return "AssignTask [id=" + id + ", assignId=" + assignId + ", userId=" + userId + ", userName=" + userName
+				+ ", dataCategory=" + dataCategory + ", pinCode=" + pinCode + ", date=" + date + ", time=" + time
+				+ ", minSerialNumber=" + minSerialNumber + ", maxSerialNumber=" + maxSerialNumber + ", totalCalls="
+				+ totalCalls + ", connectedCalls=" + connectedCalls + ", callingAreaName=" + callingAreaName
+				+ ", fileName=" + fileName + ", fileSize=" + fileSize + ", fileContent=" + Arrays.toString(fileContent)
+				+ "]";
 	}
 	
 

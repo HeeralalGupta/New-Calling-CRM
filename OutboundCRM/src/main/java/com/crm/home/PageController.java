@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.crm.model.AssignTask;
+import com.crm.model.Database;
 import com.crm.model.Feedback;
 import com.crm.model.InboundReport;
 import com.crm.model.Report;
 import com.crm.model.User;
 import com.crm.service.AssignTaskService;
+import com.crm.service.DatabaseService;
 import com.crm.service.FeedbackService;
 import com.crm.service.InboundAddReportService;
 import com.crm.service.ReportService;
@@ -47,6 +49,9 @@ public class PageController {
 	
 	@Autowired
 	private FeedbackService feedbackService;
+	
+	@Autowired
+	private DatabaseService databaseService;
 
 //	===================================== error page ========================================
 	@RequestMapping("/error-page")
@@ -232,11 +237,9 @@ public class PageController {
 			return "redirect:/error-page";
 		}
 		model.addAttribute("title", "View Report");
-
-		// fetching list of report
-		List<Report> ruralList = reportService.findRuralData();
+		
+		// fetching list of report		
 		List<Report> urbanList = reportService.findUrbanData();
-		model.addAttribute("ruralReports", ruralList);
 		model.addAttribute("urbanReports", urbanList);
 		
 		// Retrieve the user ID from the session and get the user details from the database
@@ -246,7 +249,8 @@ public class PageController {
 	    } catch (NumberFormatException e) {
 	        return "redirect:/error-page";  // Redirect if session attribute is not a valid user ID
 	    }
-
+	    List<Report> ruralList = reportService.findReportById(userId);
+	    model.addAttribute("reportData", ruralList);
 	    // Calling userProfile method form given below
 	    userProfile(model, session, userId);
 	    
@@ -261,8 +265,8 @@ public class PageController {
 		}
 		model.addAttribute("title", "Update Rural Data");
 		// Finding report data by id
-		Report report = reportService.findReport(id);
-		model.addAttribute("ruralData", report);
+//		Report report = reportService.findReportById(id);
+//		model.addAttribute("ruralData", report);
 		
 		// Retrieve the user ID from the session and get the user details from the database
 	    Long userId;
@@ -286,8 +290,8 @@ public class PageController {
 		}
 		model.addAttribute("title", "Update Urban Report");
 		// Finding report data by id
-		Report report = reportService.findReport(id);
-		model.addAttribute("urbanData", report);
+//		Report report = reportService.findReportById(id);
+//		model.addAttribute("urbanData", report);
 		// Retrieve the user ID from the session and get the user details from the database
 	    Long userId;
 	    try {
@@ -503,7 +507,6 @@ public class PageController {
 	    User userdb = userService.getUserById(userId);
 	    
 	    String userRole = userdb.getRole();
-	   System.out.println(userRole);
 	    // If user data is present, encode the profile image to base64
 	    if (userdb != null && userdb.getData() != null) {
 	        byte[] content = userdb.getData(); 
@@ -539,5 +542,24 @@ public class PageController {
 	    model.addAttribute("userProfile", userdb);
 	}
 	
+	// Database
+	@RequestMapping("/upload-data")
+	public String database(Model model, HttpSession session) {
+		model.addAttribute("title", "Database");
+		// Retrieve the user ID from the session and get the user details from the database
+		/*
+		 * Long userId; try { userId =
+		 * Long.parseLong(session.getAttribute("userSession").toString()); } catch
+		 * (NumberFormatException e) { return "redirect:/error-page"; // Redirect if
+		 * session attribute is not a valid user ID } userProfile(model, session,
+		 * userId);
+		 */
+	    
+	    // Fetching all excel data form database
+	    List<Database> allData = databaseService.getAllData();
+	    model.addAttribute("excelData", allData);
+	    
+		return "database";
+	}
 	
 }

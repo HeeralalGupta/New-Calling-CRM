@@ -197,10 +197,11 @@
 												<div class="col-sm-9">
 													<div class="custom-file">
 														<input type="file" name="file" class="custom-file-input"
-															id="customFile" required> <label
+															id="customFile" accept=".csv" required> <label
 															class="custom-file-label" for="customFile">Choose
-															file</label>
+															file</label>	
 													</div>
+													<span style="color:red; font-size:13px;">Upload only csv file.</span>
 												</div>
 											</div>
 										</div>

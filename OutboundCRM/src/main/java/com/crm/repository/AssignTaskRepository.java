@@ -28,6 +28,7 @@ public interface AssignTaskRepository extends JpaRepository<AssignTask, Long>{
 	
     public AssignTask findByUserIdAndTime(Long userId, LocalTime time);
     
-    @Query(value="SELECT * FROM \"task\" r WHERE r.\"user_id\" = :userId AND r.\"date\" BETWEEN :fromDate AND :toDate", nativeQuery = true)
+    @Query(value = "SELECT * FROM task r WHERE r.date BETWEEN :fromDate AND :toDate", nativeQuery = true)
     public List<AssignTask> findByDateBetween(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate);
+
 }

@@ -37,4 +37,6 @@ public interface InboundAddReportRepository extends JpaRepository<InboundReport,
 	// counting connected data with specific time for updating task table
 	int countByUserIdAndConnectionTypeAndAssignTime(Long userId, String connectionType, LocalTime time);
 	
+	List<InboundReport> findByDateBetween(LocalDate fromDate, LocalDate toDate);
+
 }

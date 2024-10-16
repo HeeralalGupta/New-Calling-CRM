@@ -38,12 +38,9 @@ public class ReportService {
 	}
 	
 	// Finding report by id
-	public Report findReport(Long Id) {
-		Optional<Report> findById = reportRepository.findById(Id);
-		if(findById.isPresent()) {
-			return findById.get();
-		}
-		return null;
+	public List<Report> findReportById(Long userId) {
+		return reportRepository.findAllByUserId(userId);
+		
 	}
 	
 	// Update report by id

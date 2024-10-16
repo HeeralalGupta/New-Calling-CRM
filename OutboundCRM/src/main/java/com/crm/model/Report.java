@@ -1,5 +1,7 @@
 package com.crm.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +15,7 @@ public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
-	
+	private Long userId;
 	private String connectionType;
 	private String callConnected;
 	private String callNotConnected;
@@ -38,10 +40,20 @@ public class Report {
 	private String subDivision;
 	private String callingFor;
 	private String note;
+	private LocalDate date;
 	
 	public Long getId() {
 		return Id;
 	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
 	public void setId(Long id) {
 		Id = id;
 	}
@@ -189,13 +201,37 @@ public class Report {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public Report(Long id, String connectionType, String callConnected, String callNotConnected, String name,
-			String mobile, String alternateMobile, String email, String profession, String gender, int age,
+	
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Report [Id=" + Id + ", userId=" + userId + ", connectionType=" + connectionType + ", callConnected="
+				+ callConnected + ", callNotConnected=" + callNotConnected + ", name=" + name + ", mobile=" + mobile
+				+ ", alternateMobile=" + alternateMobile + ", email=" + email + ", profession=" + profession
+				+ ", gender=" + gender + ", age=" + age + ", residentialType=" + residentialType + ", ruralDistrict="
+				+ ruralDistrict + ", ruralBlock=" + ruralBlock + ", ruralPanchayat=" + ruralPanchayat
+				+ ", ruralVillage=" + ruralVillage + ", ruralWardNumber=" + ruralWardNumber + ", urbanDistrict="
+				+ urbanDistrict + ", urbanPoliceStation=" + urbanPoliceStation + ", urbanMunicipality="
+				+ urbanMunicipality + ", lokSabha=" + lokSabha + ", vidhanSabha=" + vidhanSabha + ", subDivision="
+				+ subDivision + ", callingFor=" + callingFor + ", note=" + note + ", date=" + date + "]";
+	}
+
+	public Report(Long id, Long userId, String connectionType, String callConnected, String callNotConnected,
+			String name, String mobile, String alternateMobile, String email, String profession, String gender, int age,
 			String residentialType, String ruralDistrict, String ruralBlock, String ruralPanchayat, String ruralVillage,
 			int ruralWardNumber, String urbanDistrict, String urbanPoliceStation, String urbanMunicipality,
-			String lokSabha, String vidhanSabha, String subDivision, String callingFor, String note) {
+			String lokSabha, String vidhanSabha, String subDivision, String callingFor, String note, LocalDate date) {
 		super();
 		Id = id;
+		this.userId = userId;
 		this.connectionType = connectionType;
 		this.callConnected = callConnected;
 		this.callNotConnected = callNotConnected;
@@ -220,19 +256,9 @@ public class Report {
 		this.subDivision = subDivision;
 		this.callingFor = callingFor;
 		this.note = note;
+		this.date = date;
 	}
-	@Override
-	public String toString() {
-		return "Report [Id=" + Id + ", connectionType=" + connectionType + ", callConnected=" + callConnected
-				+ ", callNotConnected=" + callNotConnected + ", name=" + name + ", mobile=" + mobile
-				+ ", alternateMobile=" + alternateMobile + ", email=" + email + ", profession=" + profession
-				+ ", gender=" + gender + ", age=" + age + ", residentialType=" + residentialType + ", ruralDistrict="
-				+ ruralDistrict + ", ruralBlock=" + ruralBlock + ", ruralPanchayat=" + ruralPanchayat
-				+ ", ruralVillage=" + ruralVillage + ", ruralWardNumber=" + ruralWardNumber + ", urbanDistrict="
-				+ urbanDistrict + ", urbanPoliceStation=" + urbanPoliceStation + ", urbanMunicipality="
-				+ urbanMunicipality + ", lokSabha=" + lokSabha + ", vidhanSabha=" + vidhanSabha + ", subDivision="
-				+ subDivision + ", callingFor=" + callingFor + ", note=" + note + "]";
-	}
+
 	public Report() {
 		super();
 		// TODO Auto-generated constructor stub
