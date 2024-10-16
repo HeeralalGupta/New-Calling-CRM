@@ -342,10 +342,10 @@
 									            <div class="form-group row">
 									                <label class="col-sm-3 col-form-label">Lok Sabha</label>
 									                <div class="col-sm-9">
-									                    <select class="form-control" id="municipalityDropdown" name="lokSabha">
+									                    <select class="form-control" id="lokSabhaDropdown" name="lokSabha">
 									                        <option value="">Select Lok Sabha</option>
 									                        <!-- Dynamic Data will populate -->
-									                        <option>Test</option>
+									                        
 									                    </select>
 									                </div>
 									            </div>
@@ -354,10 +354,10 @@
 									            <div class="form-group row">
 									                <label class="col-sm-3 col-form-label">Vidhan Sabha</label>
 									                <div class="col-sm-9">
-									                    <select class="form-control" id="municipalityDropdown" name="vidhanSabha">
+									                    <select class="form-control" id="vidhanSabhaDropdown" name="vidhanSabha">
 									                        <option value="">Select Vidhan Sabha</option>
 									                        <!-- Dynamic Data will populate -->
-									                        <option>Test</option>
+									                       
 									                    </select>
 									                </div>
 									            </div>
@@ -366,10 +366,10 @@
 									            <div class="form-group row">
 									                <label class="col-sm-3 col-form-label">Sub Division</label>
 									                <div class="col-sm-9">
-									                    <select class="form-control" id="municipalityDropdown" name="subDivision">
+									                    <select class="form-control" id="subDivisionDropdown" name="subDivision">
 									                        <option value="">Select Sub Division</option>
 									                        <!-- Dynamic Data will populate -->
-									                        <option>Test</option>
+									                        
 									                    </select>
 									                </div>
 									            </div>

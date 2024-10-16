@@ -63,7 +63,7 @@ public class InboundAddReportController {
 			Long loggedInUserId = Long.parseLong(uid);
 			
 			//======================== for profile image ==================
-//		    userProfile(session, model);
+			// userProfile(session, model);
 		    //======================= profile image end ======================
 		    
 			model.addAttribute("userId", loggedInUserId);
@@ -73,7 +73,6 @@ public class InboundAddReportController {
 
 				long min = task.getMinSerialNumber();
 				long max = task.getMaxSerialNumber();
-//				System.out.println("Min = "+min+""+"Max = "+max);
 				
 				long currentSerialNumber = min; // Start from minSerialNumber
 				// Fetching csv file data
@@ -85,7 +84,6 @@ public class InboundAddReportController {
 					// Note: Iterate this string and set one row to one model
 					String[] csvRow = csvRows.get((int) (0)); // Fetch the current row				
 					// Checking mobile number, called or not
-					System.out.println("Hitting first method");
 
 					model.addAttribute("csvRow", csvRow); // Add the current row to the model
 					currentSerialNumber++;

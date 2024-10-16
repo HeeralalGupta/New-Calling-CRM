@@ -258,7 +258,7 @@
 										<div class="col-md-4 mb-3 float-right">
 											<div class="input-group">
 												<input type="text" class="form-control"
-													placeholder="Type to search" id="search"
+													placeholder="Type to search" id="searchByDate"
 													onkeyup="myFunction()" aria-describedby="basic-addon2">
 												<div class="input-group-append">
 													<button class="btn btn-sm btn-gradient-primary"
@@ -335,20 +335,22 @@
 		$(document).ready(function(){
 		  $("#search").on("keyup", function() {
 		    var value = $(this).val().toLowerCase();
-		    $("#reportTable tr").filter(function() {
+		    $("#reportTable tbody tr").filter(function() {
 		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 		    });
 		  });
-		});
-		/* Searching */
-		$(document).ready(function(){
-		  $("#search").on("keyup", function() {
+		  // Function to filter rows in the second table
+		  $("#searchByDate").on("keyup", function() {
 		    var value = $(this).val().toLowerCase();
-		    $("#reportTableByDateRange tr").filter(function() {
-		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+
+		    // Filter rows in the second table
+		    $("#reportTableByDateRange tbody tr").filter(function() {
+		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
 		    });
 		  });
+		  
 		});
+		
 		</script>
 		
 		<!-- Generating Report by name & date range Dynamically  -->	

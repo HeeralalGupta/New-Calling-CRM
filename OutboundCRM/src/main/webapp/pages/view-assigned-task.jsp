@@ -103,6 +103,7 @@
 												<th>Data Category</th>
 												<th>Serial No.</th>
 												<th>Total Data Assigned</th>
+												<th>Date</th>
 												<th>Time</th>
 												<th>Action</th>
 											</tr>
@@ -119,6 +120,7 @@
 										                <c:set var="difference" value="${task.maxSerialNumber - task.minSerialNumber}" />
 										                <div class="totalAssignedTask">${difference}</div>
 										            </td>
+													<td>${task.date}</td>
 													<td>${task.time}</td>
 													<td><a href="javascript:void(0);"
 														onclick="deleteTask('${task.id}')"><img
@@ -185,7 +187,7 @@
 		$(document).ready(function(){
 		  $("#search").on("keyup", function() {
 		    var value = $(this).val().toLowerCase();
-		    $("#taskTable tr").filter(function() {
+		    $("#taskTable tbody tr").filter(function() {
 		      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 		    });
 		  });
